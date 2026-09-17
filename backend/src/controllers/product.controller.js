@@ -49,13 +49,14 @@ export const fetchAllProducts = async(req,res)=>{
         const limit = Math.min(Math.max(Number(req.query.limit)|| 10 , 1),50)
         const skip = (page-1)*limit
 
+
         const [products,totalProducts] = await Promise.all([
             prisma.product.findMany({
                 skip,
                 take:limit,
                 orderBy: {
                     createdAt: "desc"
-                }
+                },
     
         }),
             prisma.product.count()
