@@ -48,7 +48,7 @@ model Product{
   year Int?
   categoryId Int
 
-  productDetail Json?
+  attributes Json?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -63,6 +63,8 @@ model Product{
 model ProductImage{
   id Int @id @default(autoincrement())
   url String
+  
+  publicId  String
   productId Int
 
   product Product @relation(fields: [productId],references: [id])
@@ -71,6 +73,7 @@ model ProductImage{
 model Category{
   id Int @id @default(autoincrement())
   name String @db.VarChar(100)
+  imageUrl String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
