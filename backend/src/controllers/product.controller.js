@@ -3,17 +3,36 @@ import { uploadToCloudinary } from "../utils/uploadToCloudinary.js"
 
 export const productPost = async (req, res) => {
     try {
+
         const {
-            name,
+            adTitle,
             description,
             price,
             location,
             year,
             categoryId,
-            productDetail
+            attributes,
         } = req.body
 
         const userId = req.user.userId
+
+        let parsedAttributes
+
+        try {
+            parsedAttributes = JSON.parse(attributes)
+        } catch (err) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid attributes format"
+            })
+        }
+        
+        if (!adTitle || !description || !price || !location || !year || !categoryId) {
+            return res.status(400).json({
+                success: false,
+                message: "All fields are required"
+            })
+        }
 
         if (!req.files || req.files.length === 0) {
             return res.status(400).json({
@@ -33,7 +52,7 @@ export const productPost = async (req, res) => {
 
         const product = await prisma.product.create({
             data: {
-                name,
+                adTitle,
                 description,
                 price: Number(price),
                 location,
@@ -48,7 +67,7 @@ export const productPost = async (req, res) => {
                     }))
                 },
 
-                productDetail
+                attributes: parsedAttributes,
             }
         })
 
@@ -82,6 +101,10 @@ export const fetchAllProducts = async (req, res) => {
                 orderBy: {
                     createdAt: "desc"
                 },
+                include:{
+                    image:true,
+                    category:true
+                }
 
             }),
             prisma.product.count()

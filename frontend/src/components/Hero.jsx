@@ -1,5 +1,6 @@
 "use client"
 import Image from "next/image"
+import Link from "next/link"
 export default function Hero() {
     return (
         <section className="relative w-full h-[220px] sm:h-[280px] lg:h-[340px] overflow-hidden">
@@ -19,10 +20,11 @@ export default function Hero() {
         className="rounded-4xl border border-gray-200 w-28 bg-white px-5 py-2.5 text-sm font-semibold text-gray-900 shadow-lg transition hover:bg-gray-100 sm:px-6">
             Explore
         </button>
-
+        <Link href={"/post"}>
         <button className="rounded-4xl border border-gray-200 w-28 bg-cyan-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition hover:bg-cyan-700 sm:px-6">
             Sell
         </button>
+        </Link>
     </div>
 </section>
     )

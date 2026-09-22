@@ -13,8 +13,10 @@ import {
     Shirt,
     ChevronRight,
 } from "lucide-react"
+import {useRouter} from "next/navigation"
 
 function Post() {
+    const router = useRouter()
     const [categories, setCategories] = useState([])
     const [loading, setLoading] = useState(true)
 
@@ -22,7 +24,7 @@ function Post() {
         try {
             const res = await fetch("http://localhost:5000/api/categories", {
                 credentials: "include",
-                cache: "force-cache",
+                cache: "no-store",
             })
 
             if (!res.ok) {
@@ -100,6 +102,9 @@ function Post() {
                         {categories.map((category) => (
                             <div
                                 key={category.id}
+                                onClick={()=>
+                                (router.push(`/attributes?categoryId=${category.id}`))
+                                }
                                 className="group flex min-h-[82px] cursor-pointer items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-3 transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-300 hover:bg-cyan-50/50 hover:shadow-md"
                             >
                                 <div className="flex items-center gap-4">
@@ -126,7 +131,7 @@ function Post() {
                                             <Refrigerator className="h-6 w-6" />
                                         )}
 
-                                        {category.name.toLowerCase() === "furnitures" && (
+                                        {category.name.toLowerCase() === "furniture" && (
                                             <Armchair className="h-6 w-6" />
                                         )}
 
@@ -138,7 +143,7 @@ function Post() {
                                             <Guitar className="h-6 w-6" />
                                         )}
 
-                                        {category.name.toLowerCase() === "fashion" && (
+                                        {category.name.toLowerCase() === "fashions" && (
                                             <Shirt className="h-6 w-6" />
                                         )}
                                     </div>

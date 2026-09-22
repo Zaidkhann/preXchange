@@ -10,10 +10,11 @@ import {
     ChevronDown,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-
+import Link from "next/link";
 export default function Navbar() {
     const [loading, setLoading] = useState(true)
     const [user, setUser] = useState(null)
+  
 
     useEffect(()=>{
         const fetchUser = async ()=>{
@@ -73,7 +74,7 @@ export default function Navbar() {
                         className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 pl-12 pr-4 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-[#0891B2] focus:bg-white focus:ring-4 focus:ring-[#0891B2]/10"
                     />
                 </div>
-
+        
                 <button className="group flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-slate-600 transition hover:bg-cyan-50 hover:text-[#0891B2]">
                     <Heart className="h-5 w-5 transition group-hover:scale-110" />
                 </button>
@@ -84,7 +85,7 @@ export default function Navbar() {
                     </div>
                 
                     <span className="hidden text-sm font-medium text-slate-700 xl:block">
-                        Profile
+                       {user.userName.charAt(0).toUpperCase() + user.userName.slice(1)}
                     </span>
                 </button>
             ):(<button
@@ -94,6 +95,7 @@ export default function Navbar() {
   <span className="transition-transform duration-300 group-hover:translate-x-0.5">
     Login
   </span>
+
 
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -109,15 +111,17 @@ export default function Navbar() {
       d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
     />
   </svg>
+
 </button>)
             }
-            {user?(<button className="group flex h-11 shrink-0 items-center gap-2 rounded-xl bg-[#0891B2] px-5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#07819e] hover:shadow-md active:translate-y-0">
+            {user?(<Link href={"/post"}><button className="group flex h-11 shrink-0 items-center gap-2 rounded-xl bg-[#0891B2] px-5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#07819e] hover:shadow-md active:translate-y-0">
                     <Plus className="h-5 w-5 transition group-hover:rotate-90" />
                     Sell
-                </button>)
+                </button></Link>)
                 :(
                     null
                 )}
+       
                 
             </nav>
         </header>

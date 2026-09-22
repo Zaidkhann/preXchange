@@ -95,7 +95,7 @@ export const signupUser = async (req,res)=>{
 
 export const loginUser = async(req,res)=>{
     try{
-        let{email,password} = req.body
+        let{email,password,userName} = req.body
         
         if(!email || !password){
             return res.status(400).json({
@@ -103,17 +103,20 @@ export const loginUser = async(req,res)=>{
                 message: "Required fields are missing"
             });
         }
-        const user = await prisma.user.findUnique({
+        const user = await prisma.user.findFirst({
             where:{
-                email:email
+                OR: [
+                    { email: email },
+                    { userName: userName }
+        ]
             }
-        })
+        })  
         if(!user){
             return res.status(404).json({
                 success:false,
                 message: "User not exist with this email address."
             })
-            response.redirect()
+            
         }
         const isPasswordCorrect = await bcrypt.compare(password,user.password)
         if(!isPasswordCorrect) {
@@ -184,7 +187,7 @@ export const logoutUser = async (req, res) => {
 
 export const getCurrentUser = async (req, res) => {
     try {
-        const userId = req.userId;
+        const userId = req.user.userId;
 
         if (!userId) {
             return res.status(401).json({

@@ -18,7 +18,7 @@ model User{
   email String @unique
   password String 
 
-  phone String?
+  phone String
   avatar    String?
 
   location String
@@ -39,7 +39,7 @@ enum Role{
 
 model Product{
   id Int @id @default(autoincrement())
-  name String  @db.VarChar(70)
+  adTitle String @db.VarChar(70)
   description String @db.VarChar(1000)
   image ProductImage[]
   price Int

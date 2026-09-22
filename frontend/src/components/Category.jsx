@@ -14,7 +14,7 @@ function CategoryCard() {
         try {
             const res = await fetch("http://localhost:5000/api/categories", {
                 credentials: "include",
-                cache: "force-cache",
+                cache:'no-store',
             })
             if (!res.ok) {
                 console.log("Failed to get category Detail")

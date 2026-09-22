@@ -1,10 +1,10 @@
 -- CreateTable
 CREATE TABLE `User` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `userName` VARCHAR(191) NULL,
+    `userName` VARCHAR(191) NOT NULL,
     `email` VARCHAR(191) NOT NULL,
     `password` VARCHAR(191) NOT NULL,
-    `phone` VARCHAR(191) NULL,
+    `phone` VARCHAR(191) NOT NULL,
     `avatar` VARCHAR(191) NULL,
     `location` VARCHAR(191) NOT NULL,
     `role` ENUM('USER', 'ADMIN') NOT NULL DEFAULT 'USER',
@@ -18,13 +18,14 @@ CREATE TABLE `User` (
 -- CreateTable
 CREATE TABLE `Product` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(70) NOT NULL,
+    `adTitle` VARCHAR(70) NOT NULL,
     `description` VARCHAR(1000) NOT NULL,
     `price` INTEGER NOT NULL,
     `userId` INTEGER NOT NULL,
     `location` VARCHAR(100) NOT NULL,
     `year` INTEGER NULL,
     `categoryId` INTEGER NOT NULL,
+    `attributes` JSON NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -35,6 +36,7 @@ CREATE TABLE `Product` (
 CREATE TABLE `ProductImage` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `url` VARCHAR(191) NOT NULL,
+    `publicId` VARCHAR(191) NULL,
     `productId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
@@ -44,6 +46,7 @@ CREATE TABLE `ProductImage` (
 CREATE TABLE `Category` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(100) NOT NULL,
+    `imageUrl` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
