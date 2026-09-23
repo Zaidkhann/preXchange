@@ -1,62 +1,52 @@
 "use client"
 
-import React,{useState} from 'react'
-import {handleSubmit} from "../../services/handleSubmitPostAttributes.js"
+import React, { useState } from 'react'
+import { handleSubmit } from "../../services/handleSubmitPostAttributes.js"
 import { useSearchParams } from 'next/navigation.js'
 
-function BikeForm() {
+function ElectronicsForm() {
     const [brand, setBrand] = useState("")
     const [images, setImages] = useState([])
     const [adTitle, setAdTitle] = useState("")
-    const [year, setYear] = useState(1900)
-    const [location,setLocation] = useState("")
-    const [owner, setOwner] = useState(1)
-    const [fuelType, setFuelType] = useState("petrol")
+    const [location, setLocation] = useState("")
     const [description, setDescription] = useState("")
     const [price, setPrice] = useState(0)
-    const [loading,setLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
     const searchParams = useSearchParams()
     const resetForm = () => {
-    setBrand("")
-    setImages([])
-    setAdTitle("")
-    setYear(1900)
-    setLocation("")
-    setOwner(1)
-    setFuelType("petrol")
-    setDescription("")
-    setPrice(0)
-}
+        setBrand("")
+        setImages([])
+        setAdTitle("")
+        setLocation("")
+        setDescription("")
+        setPrice(0)
+    }
     const attributes = {
-                    brand,
-                    owner,
-                    fuelType,
-                    year,
-                }
+        brand,
+    }
     const categoryId = searchParams.get("categoryId")
     return (
         <div className="min-h-screen w-full bg-gray-50 px-4 py-8 sm:px-6 lg:px-8">
             <form className="mx-auto flex w-full max-w-2xl flex-col gap-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8"
-                onSubmit={(e)=>handleSubmit(
-                          e,
-                          attributes,
-                          adTitle,
-                          description,
-                          price,
-                          location,
-                          year,
-                          images,
-                          categoryId,
-                          setLoading,
-                          resetForm
-                        )}
-                        >
+                onSubmit={(e) => handleSubmit(
+                    e,
+                    attributes,
+                    adTitle,
+                    description,
+                    price,
+                    location,
+                    images,
+                    categoryId,
+                    setLoading,
+                    resetForm
+                )}
+            >
                 <div className="border-b border-gray-100 pb-5">
                     <h2 className="text-xl font-bold tracking-tight text-gray-900">
-                        Bike Details
+                        Electronic Appliances Details
                     </h2>
                     <p className="mt-1 text-sm text-gray-500">
-                        Add information about the bike you're selling
+                        Add information about what you're selling
                     </p>
                 </div>
                 <div className="grid gap-6 sm:grid-cols-2">
@@ -72,130 +62,45 @@ function BikeForm() {
                             className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-sm font-medium text-gray-800 outline-none transition-all duration-200 hover:border-gray-300 focus:border-cyan-600 focus:bg-white focus:ring-4 focus:ring-cyan-100"
                         >
                             <option value="">Select Brand</option>
-                            <option value="Hero">Hero</option>
-                            <option value="Honda">Honda</option>
+                            <option value="Samsung">Samsung</option>
+                            <option value="LG">LG</option>
+                            <option value="Sony">Sony</option>
+                            <option value="Panasonic">Panasonic</option>
+                            <option value="Whirlpool">Whirlpool</option>
+                            <option value="Godrej">Godrej</option>
+                            <option value="Haier">Haier</option>
+                            <option value="Voltas">Voltas</option>
+                            <option value="IFB">IFB</option>
+                            <option value="Bosch">Bosch</option>
+                            <option value="Philips">Philips</option>
+                            <option value="Oppo">Oppo</option>
+                            <option value="Vivo">Vivo</option>
+                            <option value="OnePlus">OnePlus</option>
+                            <option value="Xiaomi">Xiaomi</option>
+                            <option value="Realme">Realme</option>
+                            <option value="Apple">Apple</option>
+                            <option value="Dell">Dell</option>
+                            <option value="HP">HP</option>
+                            <option value="Lenovo">Lenovo</option>
+                            <option value="Asus">Asus</option>
+                            <option value="Acer">Acer</option>
+                            <option value="JBL">JBL</option>
+                            <option value="Boat">Boat</option>
+                            <option value="Bose">Bose</option>
+                            <option value="Dyson">Dyson</option>
+                            <option value="Ola">Ola</option>
+                            <option value="Havells">Havells</option>
                             <option value="Bajaj">Bajaj</option>
-                            <option value="TVS">TVS</option>
-                            <option value="Royal Enfield">Royal Enfield</option>
-                            <option value="Yamaha">Yamaha</option>
-                            <option value="Suzuki">Suzuki</option>
-                            <option value="KTM">KTM</option>
-                            <option value="Kawasaki">Kawasaki</option>
-                            <option value="BMW Motorrad">BMW Motorrad</option>
-                            <option value="Jawa">Jawa</option>
-                            <option value="Yezdi">Yezdi</option>
-                            <option value="Harley-Davidson">Harley-Davidson</option>
-                            <option value="Triumph">Triumph</option>
-                            <option value="Ducati">Ducati</option>
-                            <option value="Aprilia">Aprilia</option>
-                            <option value="Benelli">Benelli</option>
-                            <option value="Ola Electric">Ola Electric</option>
-                            <option value="Revolt">Revolt</option>
-                            <option value="Ultraviolette">Ultraviolette</option>
-                            <option value="Ather">Ather</option>
-                            <option value="Oben">Oben</option>
-                            <option value="Vida">Vida</option>
+                            <option value="Orient">Orient</option>
+                            <option value="Usha">Usha</option>
+                            <option value="Crompton">Crompton</option>
+                            <option value="Prestige">Prestige</option>
                             <option value="Other">Other</option>
-
+                            \
                         </select>
                     </div>
-                    <div className="space-y-2">
-                        <label className="text-sm font-semibold text-gray-800">
-                            Year <span className="text-cyan-600">*</span>
-                        </label>
-
-                        <input
-                            onChange={(e) => setYear(e.target.value)}
-                            type="number"
-                            min={1900}
-                            max={2026}
-                            placeholder="e.g. 2022"
-                            className="[appearance:textfield] h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-sm text-gray-900 outline-none transition-all duration-200 placeholder:text-gray-400 hover:border-gray-300 focus:border-cyan-600 focus:bg-white focus:ring-4 focus:ring-cyan-100 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                        />
-                    </div>
 
                 </div>
-
-                <div className="space-y-3">
-                    <label className="text-sm font-semibold text-gray-800">
-                        Fuel Type <span className="text-cyan-600">*</span>
-                    </label>
-
-                    <div className="flex flex-wrap gap-3">
-                        <button
-                            value="Electric"
-                            onClick={(e) => setFuelType(e.target.value)
-                            }
-                            type='button'
-                            className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition-all duration-200 hover:border-cyan-500 hover:bg-cyan-50 hover:text-cyan-700"
-                        >
-                            Electric
-                        </button>
-                    
-                    <button
-                        value="CNG"
-                        onClick={(e) => setFuelType(e.target.value)}
-                        type='button'
-                        className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition-all duration-200 hover:border-cyan-500 hover:bg-cyan-50 hover:text-cyan-700"
-                    >
-                        CNG
-                    </button>
-                    <button
-                        value="Petrol"
-                        onClick={(e) => setFuelType(e.target.value)}
-                        type='button'
-                        className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition-all duration-200 hover:border-cyan-500 hover:bg-cyan-50 hover:text-cyan-700"
-                    >
-                        Petrol
-                    </button>
-                    </div>
-                </div>
-                <div className="space-y-3">
-                    <label className="text-sm font-semibold text-gray-800">
-                        Number of Owners <span className="text-cyan-600">*</span>
-                    </label>
-
-                    <div className="flex flex-wrap gap-3">
-                        <button
-                            value='1'
-                            onClick={(e) => setOwner(e.target.value)}
-
-                            type='button'
-                            className="flex h-11 w-12 items-center justify-center rounded-xl border border-gray-200 bg-white text-sm font-semibold text-gray-700 transition-all duration-200 hover:border-cyan-500 hover:bg-cyan-50 hover:text-cyan-700"
-                        >
-                            1
-                        </button>
-
-                        <button
-                            value='2'
-                            onClick={(e) => setOwner(e.target.value)}
-
-                            type='button'
-                            className="flex h-11 w-12 items-center justify-center rounded-xl border border-gray-200 bg-white text-sm font-semibold text-gray-700 transition-all duration-200 hover:border-cyan-500 hover:bg-cyan-50 hover:text-cyan-700"
-                        >
-                            2
-                        </button>
-
-                        <button
-                            value='3'
-                            onClick={(e) => setOwner(e.target.value)}
-                            type='button'
-                            className="flex h-11 w-12 items-center justify-center rounded-xl border border-gray-200 bg-white text-sm font-semibold text-gray-700 transition-all duration-200 hover:border-cyan-500 hover:bg-cyan-50 hover:text-cyan-700"
-                        >
-                            3
-                        </button>
-
-                        <button
-                            value='4+'
-                            onClick={(e) => setOwner(e.target.value)}
-                            type='button'
-                            className="flex h-11 w-12 items-center justify-center rounded-xl border border-gray-200 bg-white text-sm font-semibold text-gray-700 transition-all duration-200 hover:border-cyan-500 hover:bg-cyan-50 hover:text-cyan-700"
-                        >
-                            4+
-                        </button>
-                    </div>
-                </div>
-
                 <div className="space-y-2">
                     <label className="text-sm font-semibold text-gray-800">
                         Ad Title <span className="text-cyan-600">*</span>
@@ -205,7 +110,7 @@ function BikeForm() {
                         onChange={(e) => setAdTitle(e.target.value)}
                         type="text"
                         maxLength={70}
-                        placeholder="e.g. Bajaj Pulsar NS 2024 Petrol"
+                        placeholder="e.g. LG Microwave Convection"
                         className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-sm text-gray-900 outline-none transition-all duration-200 placeholder:text-gray-400 hover:border-gray-300 focus:border-cyan-600 focus:bg-white focus:ring-4 focus:ring-cyan-100"
                     />
                 </div>
@@ -218,7 +123,7 @@ function BikeForm() {
                     <textarea
                         onChange={(e) => setDescription(e.target.value)}
                         maxLength={1000}
-                        placeholder="Describe the bike's condition, features, service history, etc."
+                        placeholder="Describe the Product condition, features, service history, etc."
                         rows={5}
                         className="w-full resize-none rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 outline-none transition-all duration-200 placeholder:text-gray-400 hover:border-gray-300 focus:border-cyan-600 focus:bg-white focus:ring-4 focus:ring-cyan-100"
                     />
@@ -356,4 +261,4 @@ function BikeForm() {
     )
 }
 
-export default BikeForm
+export default ElectronicsForm
