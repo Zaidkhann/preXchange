@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react'
-import { handleSubmit } from '../services/handleSubmitPostAttributes'
+import { handleSubmit } from '../../services/handleSubmitPostAttributes'
 import { useSearchParams } from 'next/navigation'
 function MobileForm() {
 

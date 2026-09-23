@@ -1,6 +1,6 @@
 "use client"
 import React, {  useState } from 'react'
-import {handleSubmit} from "../services/handleSubmitPostAttributes.js"
+import {handleSubmit} from "../../services/handleSubmitPostAttributes.js"
 import { useSearchParams } from 'next/navigation.js'
 
 function CarForm() {
