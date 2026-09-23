@@ -211,3 +211,40 @@ export const fetchProductsByFilter = async (req, res) => {
         })
     }
 }
+
+
+
+export const fetchProductById = async (req,res) => {
+    try{
+        const productId = Number(req.params.productId)
+        console.log(productId)
+        const product = await prisma.product.findFirst({
+            where:{
+                id:productId 
+            },
+            include:{
+                image: true,
+                user:true
+            }
+        })
+        if (!product) {
+            return res.status(404).json({
+                success: false,
+                message: "Product not found"
+            })
+        }
+
+        return res.status(200).json({
+            success: true,
+            product
+        })
+
+
+    }catch(err){
+        console.log("Internal error To fetch product by Id")
+        return res.json({
+            success:false,
+            message:"Failed to get product by id"
+        })
+    }
+}

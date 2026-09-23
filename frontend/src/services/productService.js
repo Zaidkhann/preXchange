@@ -31,8 +31,24 @@ async function getAllProducts(){
     const data = await res.json()
     return data
 }
+async function getProductById(productId){
+    const res = await fetch(`http://localhost:5000/api/products/fetchProductById/${productId}`,{
+        cache:"no-store"
+    })
+    if(!res.ok){
+        console.log("Failed to get products")
+        return{
+            success:false,       
+            message:"Failed to get products"
+        }
+    }
+    const data = await res.json()
+    return data.product
+}
 
 
 
 
-export {productsByCategoryId,getAllProducts}
+
+
+export {productsByCategoryId,getAllProducts,getProductById}
