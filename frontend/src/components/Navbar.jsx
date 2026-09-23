@@ -88,7 +88,7 @@ export default function Navbar() {
                        {user.userName.charAt(0).toUpperCase() + user.userName.slice(1)}
                     </span>
                 </button>
-            ):(<button
+            ):(<Link href={"/login"}><button
   type="button"
   className="group flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-5 py-2.5 text-sm font-semibold text-cyan-700 transition-all duration-300 hover:border-cyan-500 hover:bg-cyan-500 hover:text-white hover:shadow-lg hover:shadow-cyan-200 active:scale-95"
 >
@@ -112,7 +112,7 @@ export default function Navbar() {
     />
   </svg>
 
-</button>)
+</button> </Link>)
             }
             {user?(<Link href={"/post"}><button className="group flex h-11 shrink-0 items-center gap-2 rounded-xl bg-[#0891B2] px-5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#07819e] hover:shadow-md active:translate-y-0">
                     <Plus className="h-5 w-5 transition group-hover:rotate-90" />

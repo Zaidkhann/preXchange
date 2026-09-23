@@ -172,7 +172,10 @@ export const fetchProductsByFilter = async (req, res) => {
                 orderBy: {
                     createdAt: "desc"
                 },
-                where
+                where,
+                include:{
+                    image:true
+                }
             }),
             prisma.product.count({
                 where
