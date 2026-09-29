@@ -27,7 +27,7 @@ export const productPost = async (req, res) => {
             })
         }
         
-        if (!adTitle || !description || !price || !location || !year || !categoryId) {
+        if (!adTitle || !description || !price || !location || !categoryId) {
             return res.status(400).json({
                 success: false,
                 message: "All fields are required"
@@ -92,10 +92,30 @@ export const fetchAllProducts = async (req, res) => {
         const page = Math.max(Number(req.query.page) || 1, 1)
         const limit = Math.min(Math.max(Number(req.query.limit) || 10, 1), 50)
         const skip = (page - 1) * limit
-
+        const search = req.query.search?.trim()
+        const where = search?{
+                    OR:[
+                        {
+                            adTitle : {
+                                contains : search
+                            }
+                        },
+                        {
+                            description:{
+                                contains: search
+                        }
+                    },
+                    {
+                        location:{
+                            contains:search
+                        }
+                    }
+                    ]
+                }:{}
 
         const [products, totalProducts] = await Promise.all([
             prisma.product.findMany({
+                where,
                 skip,
                 take: limit,
                 orderBy: {
@@ -104,7 +124,7 @@ export const fetchAllProducts = async (req, res) => {
                 include:{
                     image:true,
                     category:true
-                }
+                },
 
             }),
             prisma.product.count()

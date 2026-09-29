@@ -34,6 +34,7 @@ function FurnitureForm() {
                     price,
                     location,
                     images,
+                    "",
                     categoryId,
                     setLoading,
                     resetForm

@@ -33,6 +33,7 @@ function HobbyForm() {
                     description,
                     price,
                     location,
+                    "",
                     images,
                     categoryId,
                     setLoading,

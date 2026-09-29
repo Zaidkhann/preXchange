@@ -72,7 +72,7 @@ function Post() {
                     </div>
 
                     <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-                        Post Your Ad
+                        Publish Your Ad
                     </h1>
 
                     <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-gray-500 sm:text-base">

@@ -1,5 +1,4 @@
 export const handleLogout = async(router) =>{
-    e.preventDefault()
     try{
         const res = await fetch("http://localhost:5000/api/auth/logout",{
             method:"POST",

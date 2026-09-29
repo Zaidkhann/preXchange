@@ -33,6 +33,7 @@ function PetForm() {
                     description,
                     price,
                     location,
+                    "",
                     images,
                     categoryId,
                     setLoading,

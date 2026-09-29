@@ -17,8 +17,12 @@ async function productsByCategoryId(categoryId){
 
 }
 
-async function getAllProducts(){
-    const res = await fetch("http://localhost:5000/api/products/fetch-products",{
+async function getAllProducts(search=""){
+    const url = new URL("http://localhost:5000/api/products/fetch-products")
+    if(search.trim()){
+        url.searchParams.set("search",search.trim())
+    }
+    const res = await fetch(url,{
         cache:"no-store"
     })
     if(!res.ok){

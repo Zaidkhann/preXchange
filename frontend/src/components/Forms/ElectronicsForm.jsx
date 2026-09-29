@@ -35,6 +35,7 @@ function ElectronicsForm() {
                     description,
                     price,
                     location,
+                    "",
                     images,
                     categoryId,
                     setLoading,

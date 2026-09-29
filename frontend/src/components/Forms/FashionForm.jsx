@@ -33,6 +33,7 @@ function FashionForm() {
                     description,
                     price,
                     location,
+                    "",
                     images,
                     categoryId,
                     setLoading,
