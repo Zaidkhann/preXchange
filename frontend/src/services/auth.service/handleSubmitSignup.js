@@ -1,7 +1,7 @@
 const handleSubmit = async (e,userName,email,password,location,phone,router)=>{
     e.preventDefault()
     try{
-        const res = await fetch("http://localhost:5000/api/auth/signup",
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/signup`,
         {
             credentials:"include",
             method:"POST",

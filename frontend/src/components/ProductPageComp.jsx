@@ -19,6 +19,7 @@ import {
   Car,
   Home,
   Package,
+  CopyCheck,
 } from "lucide-react"
 
 function ProductPageComp({
@@ -35,12 +36,18 @@ function ProductPageComp({
   const [liked, setLiked] = useState(false)
   const [showPhone, setShowPhone] = useState(false)
   const router = useRouter()
-
+  const [isCopied, setIsCopied] = useState(false);
   const images = Array.isArray(image) ? image : []
 
   const getImageUrl = (item) => {
     if (typeof item === "string") return item
     return item?.url || item?.secure_url || ""
+  }
+
+  const phoneClick = ()=>{
+    navigator.clipboard.writeText(user?.phone)
+    setShowPhone(!showPhone)
+    setIsCopied(true)
   }
 
   const validImages = images
@@ -437,14 +444,15 @@ function ProductPageComp({
 
                 <button
                   type="button"
-                  onClick={() => setShowPhone(!showPhone)}
+                  onClick={phoneClick} 
                   className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border-2 border-cyan-600 px-5 py-3 text-sm font-bold text-cyan-700 transition hover:bg-cyan-50"
                 >
                   <Phone size={18} />
                   {showPhone
-                    ? user?.phone || "Phone unavailable"
+                    ? user?.phone  || "Phone unavailable"
                     : "Show phone number"}
                 </button>
+                {isCopied && <p className="text-center text-cyan-600 flex gap-2 mt-2">Copied! <CopyCheck/></p>}
 
                 {user?.email && (
                   <div className="mt-5 flex items-center gap-3 rounded-xl bg-slate-50 p-3">

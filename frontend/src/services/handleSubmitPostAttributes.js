@@ -14,7 +14,7 @@ const handleSubmit = async (e,attributes,adTitle,description,price,location,year
             formData.append("image",image)
             
         });
-        const res = await fetch("http://localhost:5000/api/products/product-post", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/product-post`, {
             credentials: "include",
             method: "POST",
             body: formData

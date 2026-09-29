@@ -109,6 +109,12 @@ export const fetchAllProducts = async (req, res) => {
                         location:{
                             contains:search
                         }
+                    },{
+                        category:{
+                            name:{
+                                contains:search
+                            }
+                        }
                     }
                     ]
                 }:{}
@@ -127,16 +133,10 @@ export const fetchAllProducts = async (req, res) => {
                 },
 
             }),
-            prisma.product.count()
+            prisma.product.count({where})
         ])
 
         const totalPages = Math.ceil(totalProducts / limit)
-        if (products.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: "No Items found with your match"
-            })
-        }
         return res.status(200).json({
             success: true,
             message: "Items found successfully",
@@ -173,6 +173,7 @@ export const fetchProductsByFilter = async (req, res) => {
         const minPrice = Number(req.query.min_price_) || undefined
         const maxPrice = Number(req.query.max_price_) || undefined
         const afterYear = Number(req.query.after_year) || undefined
+        const beforeYear = Number(req.query.before_year) || undefined
 
         const where = {
             categoryId,
@@ -181,6 +182,7 @@ export const fetchProductsByFilter = async (req, res) => {
                 lte: maxPrice
             },
             year: {
+                lte: beforeYear,
                 gte: afterYear
             },
         }

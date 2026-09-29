@@ -17,7 +17,8 @@ const getLocation = (setLocation)=>{
 )
     
 }
-export default getLocation
+
+export {getLocation}
 
 
 

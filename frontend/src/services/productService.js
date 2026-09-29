@@ -1,5 +1,12 @@
-async function productsByCategoryId(categoryId){
-    const res = await fetch(`http://localhost:5000/api/products/fetchProductsByFilter/${categoryId}`,
+
+async function productsByCategoryId(categoryId,searchParams){
+    const params = await searchParams
+    const minPrice = params?.min_price_
+    const maxPrice = params?.max_price_
+    const afterYear = params?.after_year
+    const beforeYear = params?.before_year
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/fetchProductsByFilter/${categoryId}?min_price_=${minPrice}&max_price_=${maxPrice}&after_year=${afterYear}&before_year=${beforeYear}`,
         {
             credentials:"include",
             cache:"no-store"
@@ -18,7 +25,7 @@ async function productsByCategoryId(categoryId){
 }
 
 async function getAllProducts(search=""){
-    const url = new URL("http://localhost:5000/api/products/fetch-products")
+    const url = new URL(`${process.env.NEXT_PUBLIC_API_URL}/api/products/fetch-products`)
     if(search.trim()){
         url.searchParams.set("search",search.trim())
     }
@@ -36,7 +43,7 @@ async function getAllProducts(search=""){
     return data
 }
 async function getProductById(productId){
-    const res = await fetch(`http://localhost:5000/api/products/fetchProductById/${productId}`,{
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/fetchProductById/${productId}`,{
         cache:"no-store"
     })
     if(!res.ok){
