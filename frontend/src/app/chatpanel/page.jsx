@@ -35,11 +35,6 @@ function ChatPanel() {
 
     const handleChat = async (chat) => {
         setSelectedChat(chat.id)
-    
-    // const data = await postConversation(productId)
-
-    // console.log("conversation response:", data)
-
     router.push(`/conversation/${chat.id}`)
     }
 

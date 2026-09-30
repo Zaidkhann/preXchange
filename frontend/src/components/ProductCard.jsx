@@ -11,7 +11,7 @@ function ProductCard({ productDetails }) {
     <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {productDetails?.map((product) => (
         <Link
-          href={`/product/${product.id}`}
+          href={`/product/${product.id}?prodTitle=${product.adTitle}`}
           key={product.id}
           className="group relative overflow-hidden rounded-2xl border border-gray-200 border-l-4 border-l-cyan-500 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-cyan-200 hover:border-l-cyan-500 hover:shadow-xl hover:shadow-cyan-100/40"
         >

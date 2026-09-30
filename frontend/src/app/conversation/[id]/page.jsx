@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { connectWs } from "../../../ws"
 import { SendIcon, ArrowLeft, MoreVertical } from "lucide-react"
 import { getCurrentUser } from "../../../services/me.js"
-import { useSearchParams, useParams } from "next/navigation.js"
+import { useSearchParams, useParams,useRouter } from "next/navigation.js"
 import { getConversationById } from "../../../services/conversation-frontend.js"
 
 function Chat() {
@@ -17,10 +17,12 @@ function Chat() {
 
     const searchParams = useSearchParams()
     const params = useParams()
+    const router = useRouter()
 
     const sellerName = searchParams.get("seller")
     const price = searchParams.get("pr")
     const productId = searchParams.get("prodId")
+    const productTitle = searchParams.get("prodTitle")
     const conversationId = Number(params.id)
 
     useEffect(() => {
@@ -39,8 +41,8 @@ function Chat() {
         const fetchUser = async () => {
             const user = await getCurrentUser()
 
-            setUsername(user.userName)
-            setUserId(Number(user.id))
+            setUsername(user?.userName)
+            setUserId(Number(user?.id))
         }
 
         fetchUser()
@@ -83,7 +85,7 @@ function Chat() {
 
                 <div className="flex items-center gap-3">
 
-                    <button className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100">
+                    <button onClick={()=>router.back()} className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100">
                         <ArrowLeft size={19} />
                     </button>
 
@@ -93,7 +95,7 @@ function Chat() {
 
                     <div>
                         <h2 className="text-sm font-semibold text-slate-900">
-                            {sellerName || userName}
+                            {sellerName} | {productTitle}
                         </h2>
 
                         <div className="flex items-center gap-1.5">

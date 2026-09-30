@@ -2,7 +2,7 @@
 
 import React, { useState } from "react"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
+import { useRouter,useSearchParams } from "next/navigation"
 import {postConversation} from "../services/conversation-frontend.js"
 import {
   ArrowLeft,
@@ -38,8 +38,11 @@ function ProductPageComp({
   const [liked, setLiked] = useState(false)
   const [showPhone, setShowPhone] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [isCopied, setIsCopied] = useState(false);
   const images = Array.isArray(image) ? image : []
+  const productTitle = searchParams.get("prodTitle")
+
 
   const getImageUrl = (item) => {
     if (typeof item === "string") return item
@@ -90,16 +93,10 @@ function ProductPageComp({
     })
   }
   const handleChat = async () => {
-    console.log("Chat clicked")
-    console.log("productId:", productId)
-
     const data = await postConversation(productId)
+    if (!data) router.push("/login")
 
-    console.log("conversation response:", data)
-
-    if (!data) return
-
-    router.push(`/conversation/${data.id}?seller=${user.userName}/pr=${price}/prodId=${productId}`)
+    router.push(`/conversation/${data?.id}?seller=${user?.userName}&pr=${price}&prodId=${productId}&prodTitle=${productTitle}`)
 }
 
   const attributeLabels = {

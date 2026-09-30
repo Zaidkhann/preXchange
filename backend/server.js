@@ -4,7 +4,6 @@ import { createServer } from "node:http";
 import {Server} from "socket.io"
 import prisma from "./src/lib/prisma.js";
 const startServer = ()=>{
-    const ROOM = "ROOM A"
     try{
         const PORT = process.env.PORT || 3000;
         const server = createServer(app)
