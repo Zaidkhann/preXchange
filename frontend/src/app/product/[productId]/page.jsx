@@ -31,6 +31,7 @@ if(!product){
         createdAt={product.createdAt} 
         image={product.image} 
         user={product.user} 
+        productId={product.id}
         />}
     </div>
   )

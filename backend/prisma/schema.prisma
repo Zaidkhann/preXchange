@@ -92,6 +92,9 @@ model Conversation {
   product  Product   @relation(fields: [productId], references: [id])
   messages Message[]
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
   @@unique([buyerId, sellerId, productId])
 }
 

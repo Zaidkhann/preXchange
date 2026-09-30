@@ -7,7 +7,7 @@ import { getCurrentUser } from "@/services/me.js"
 import { getLocation } from "@/services/locationFetch.js"
 import LocationByCityApi from "@/components/location.jsx"
 import {
-    Heart,
+    MessagesCircle,
     MapPin,
     Search,
     User,
@@ -141,10 +141,11 @@ export default function Navbar() {
                         className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 pl-12 pr-4 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-[#0891B2] focus:bg-white focus:ring-4 focus:ring-[#0891B2]/10"
                     />
                 </form>
-
+                <Link href={`/chatpanel?uid=${user.id}`}>
                 <button className="group flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-slate-600 transition hover:bg-cyan-50 hover:text-[#0891B2]">
-                    <Heart className="h-5 w-5 transition group-hover:scale-110" />
+                    <MessagesCircle className="h-5 w-5 transition group-hover:scale-110" />
                 </button>
+                </Link>
 
                 {user ? (
                     <Dropdown>

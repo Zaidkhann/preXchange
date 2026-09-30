@@ -3,6 +3,7 @@
 import React, { useState } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
+import {postConversation} from "../services/conversation-frontend.js"
 import {
   ArrowLeft,
   ArrowRight,
@@ -31,6 +32,7 @@ function ProductPageComp({
   createdAt,
   image,
   user,
+  productId
 }) {
   const [currentImage, setCurrentImage] = useState(0)
   const [liked, setLiked] = useState(false)
@@ -87,6 +89,18 @@ function ProductPageComp({
       year: "numeric",
     })
   }
+  const handleChat = async () => {
+    console.log("Chat clicked")
+    console.log("productId:", productId)
+
+    const data = await postConversation(productId)
+
+    console.log("conversation response:", data)
+
+    if (!data) return
+
+    router.push(`/conversation/${data.id}?seller=${user.userName}/pr=${price}/prodId=${productId}`)
+}
 
   const attributeLabels = {
     brand: "Brand",
@@ -437,6 +451,7 @@ function ProductPageComp({
                 <button
                   type="button"
                   className="flex w-full items-center justify-center gap-2 rounded-xl bg-cyan-600 px-5 py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-cyan-700"
+                  onClick={handleChat}
                 >
                   <MessageCircle size={19} />
                   Chat with seller
