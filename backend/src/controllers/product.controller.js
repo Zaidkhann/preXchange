@@ -26,7 +26,7 @@ export const productPost = async (req, res) => {
                 message: "Invalid attributes format"
             })
         }
-        
+
         if (!adTitle || !description || !price || !location || !categoryId) {
             return res.status(400).json({
                 success: false,
@@ -93,47 +93,52 @@ export const fetchAllProducts = async (req, res) => {
         const limit = Math.min(Math.max(Number(req.query.limit) || 10, 1), 50)
         const skip = (page - 1) * limit
         const search = req.query.search?.trim()
-        const where = search?{
-                    OR:[
-                        {
-                            adTitle : {
-                                contains : search
-                            }
-                        },
-                        {
-                            description:{
-                                contains: search
-                        }
-                    },
-                    {
-                        location:{
-                            contains:search
-                        }
-                    },{
-                        category:{
-                            name:{
-                                contains:search
-                            }
+        const where = search ? {
+            OR: [
+                {
+                    adTitle: {
+                        contains: search
+                    }
+                },
+                {
+                    description: {
+                        contains: search
+                    }
+                },
+                {
+                    location: {
+                        contains: search
+                    }
+                }, {
+                    category: {
+                        name: {
+                            contains: search
                         }
                     }
-                    ]
-                }:{}
+                }
+            ]
+        } : {}
 
         const [products, totalProducts] = await Promise.all([
             prisma.product.findMany({
                 where,
                 skip,
                 take: limit,
-                orderBy: {
-                    createdAt: "desc"
-                },
-                include:{
-                    image:true,
-                    category:true
+                orderBy: [
+                    {
+                        createdAt: "desc"
+                    },
+                    {
+                        id: "desc"
+                    }
+                ],
+                include: {
+                    image: true,
+                    category: true
                 },
 
             }),
-            prisma.product.count({where})
+            prisma.product.count({ where })
         ])
 
         const totalPages = Math.ceil(totalProducts / limit)
@@ -195,8 +200,8 @@ export const fetchProductsByFilter = async (req, res) => {
                     createdAt: "desc"
                 },
                 where,
-                include:{
-                    image:true
+                include: {
+                    image: true
                 }
             }),
             prisma.product.count({
@@ -236,17 +241,17 @@ export const fetchProductsByFilter = async (req, res) => {
 
 
 
-export const fetchProductById = async (req,res) => {
-    try{
+export const fetchProductById = async (req, res) => {
+    try {
         const productId = Number(req.params.productId)
         console.log(productId)
         const product = await prisma.product.findFirst({
-            where:{
-                id:productId 
+            where: {
+                id: productId
             },
-            include:{
+            include: {
                 image: true,
-                user:true
+                user: true
             }
         })
         if (!product) {
@@ -262,11 +267,11 @@ export const fetchProductById = async (req,res) => {
         })
 
 
-    }catch(err){
+    } catch (err) {
         console.log("Internal error To fetch product by Id")
         return res.json({
-            success:false,
-            message:"Failed to get product by id"
+            success: false,
+            message: "Failed to get product by id"
         })
     }
 }

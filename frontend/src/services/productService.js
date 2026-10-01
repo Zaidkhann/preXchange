@@ -24,8 +24,8 @@ async function productsByCategoryId(categoryId,searchParams){
 
 }
 
-async function getAllProducts(search=""){
-    const url = new URL(`${process.env.NEXT_PUBLIC_API_URL}/api/products/fetch-products`)
+async function getAllProducts(search="",page){
+    const url = new URL(`${process.env.NEXT_PUBLIC_API_URL}/api/products/fetch-products?page=${page}`)
     if(search.trim()){
         url.searchParams.set("search",search.trim())
     }

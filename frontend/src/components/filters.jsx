@@ -5,7 +5,7 @@ import { useRouter, usePathname } from "next/navigation"
 import { SlidersHorizontal, RotateCcw } from "lucide-react"
 
 function Filters() {
-    const [minPrice, setMinPrice] = useState(50000)
+    const [minPrice, setMinPrice] = useState(0)
     const [maxPrice, setMaxPrice] = useState(5000000)
     const [afterYear, setAfterYear] = useState(1950)
     const [beforeYear, setBeforeYear] = useState(2026)
@@ -45,7 +45,6 @@ function Filters() {
                 onSubmit={handleYearSubmit}
                 className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
             >
-                {/* Header */}
                 <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
                     <div className="flex items-center gap-2.5">
                         <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-50">
@@ -74,7 +73,6 @@ function Filters() {
 
                 <div className="space-y-7 p-5">
 
-                    {/* Price */}
                     <section>
                         <div className="mb-4 flex items-end justify-between">
                             <div>
@@ -92,7 +90,6 @@ function Filters() {
                         </div>
 
                         <div className="space-y-4">
-                            {/* Minimum */}
                             <div>
                                 <div className="mb-2 flex justify-between text-xs">
                                     <span className="font-medium text-slate-500">
@@ -119,7 +116,6 @@ function Filters() {
                                 />
                             </div>
 
-                            {/* Maximum */}
                             <div>
                                 <div className="mb-2 flex justify-between text-xs">
                                     <span className="font-medium text-slate-500">
@@ -148,10 +144,8 @@ function Filters() {
                         </div>
                     </section>
 
-                    {/* Divider */}
                     <div className="h-px bg-slate-100" />
 
-                    {/* Year */}
                     <section>
                         <div className="mb-4">
                             <p className="text-sm font-semibold text-slate-800">
@@ -205,7 +199,6 @@ function Filters() {
                         </div>
                     </section>
 
-                    {/* Apply */}
                     <button
                         type="submit"
                         className="w-full rounded-xl bg-cyan-600 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-cyan-700 active:scale-[0.98]"
