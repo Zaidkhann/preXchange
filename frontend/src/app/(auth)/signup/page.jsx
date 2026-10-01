@@ -3,8 +3,9 @@
 import React, { useState } from "react"
 import Image from "next/image"
 import { useRouter } from 'next/navigation'
-
+import { FcGoogle } from "react-icons/fc"
 import { handleSubmit } from "../../../services/auth.service/handleSubmitSignup"
+import {toast} from "@heroui/react"
 
 function signup() {
     const [userName, setUserName] = useState("")
@@ -208,6 +209,22 @@ function signup() {
                                     className="w-full h-12 mt-2 rounded-xl bg-[#0891B2] text-white font-semibold shadow-lg shadow-cyan-600/20 transition-all duration-200 hover:bg-[#0e7490] hover:shadow-cyan-600/30 active:scale-[0.98]"
                                 >
                                     Create Account
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        window.location.href = "http://localhost:5000/api/auth/google"
+                                        toast.success("Signup Successfully")
+                                    }}
+                                    className="group relative flex h-12 w-full items-center justify-center gap-3 overflow-hidden rounded-xl border border-gray-200 bg-white px-5 text-sm font-semibold text-gray-700 shadow-sm transition-all duration-200 hover:border-gray-300 hover:bg-gray-50 hover:shadow-md active:scale-[0.98]"
+                                >
+                                    <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-cyan-50/70 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+
+                                    <FcGoogle className="relative z-10 text-[21px]" />
+
+                                    <span className="relative z-10">
+                                        Continue with Google
+                                    </span>
                                 </button>
 
                                 <p className="text-center text-xs text-slate-400 pt-2">

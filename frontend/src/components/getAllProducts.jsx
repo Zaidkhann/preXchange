@@ -10,6 +10,7 @@ function GetProducts() {
     const searchParams = useSearchParams()
     const search = searchParams.get("search") || ""
     const [page, setPage] = useState(1)
+    const [hasNextPage,setHasNextPage] = useState(false)
 
 
   
@@ -19,6 +20,8 @@ function GetProducts() {
         async function fetchProducts() {
             const productResponse = await getAllProducts(search,page)
             const productDetail = productResponse?.data?.products
+            const pagination = productResponse?.data?.pagination
+            setHasNextPage(pagination?.hasNextPage || false)
         if (page === 1) {
     setProducts(productDetail || [])
 } else {
@@ -38,8 +41,11 @@ function GetProducts() {
     return (
     <div className="flex flex-col items-center gap-4">
         <ProductCard productDetails={products} />
-        <LoadMore setPage={setPage}/>
+        {hasNextPage?(
+            <LoadMore setPage={setPage}/>
 
+        ):""}
+        
         
     </div>
 )

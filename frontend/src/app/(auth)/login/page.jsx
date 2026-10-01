@@ -5,6 +5,8 @@ import Image from "next/image"
 import { useRouter } from 'next/navigation'
 import Link from "next/link.js"
 import { handleSubmit } from "../../../services/auth.service/handleSubmitlogin.js"
+import { FcGoogle } from "react-icons/fc"
+import {toast} from "@heroui/react"
 
 function login() {
     const [userName, setUserName] = useState("")
@@ -204,6 +206,27 @@ function login() {
                                 >
                                     Sign In
                                 </button>
+
+
+                                <button
+                                type="button"
+                                onClick={()=>{
+                                    window.location.href = "http://localhost:5000/api/auth/google"
+                                    toast.success("Logged In")
+
+                                }}
+                                className="group relative flex h-12 w-full items-center justify-center gap-3 overflow-hidden rounded-xl border border-gray-200 bg-white px-5 text-sm font-semibold text-gray-700 shadow-sm transition-all duration-200 hover:border-gray-300 hover:bg-gray-50 hover:shadow-md active:scale-[0.98]"
+                                >
+                                <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-cyan-50/70 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+
+                                <FcGoogle className="relative z-10 text-[21px]" />
+
+                                <span className="relative z-10">
+                                    Continue with Google
+                                </span>
+                                </button>
+
+
 
 
 

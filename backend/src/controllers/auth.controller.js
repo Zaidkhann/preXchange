@@ -227,3 +227,37 @@ export const getCurrentUser = async (req, res) => {
         });
     }
 };  
+
+export const googleCallback = async (req, res) => {
+    try {
+        const user = req.user
+
+        if (!user) {
+            return res.redirect("http://localhost:3000/login")
+        }
+
+        const token = jwt.sign(
+            {
+                userId: user.id
+            },
+            process.env.JWT_SECRET_KEY,
+            {
+                expiresIn: "3d"
+            }
+        )
+
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax",
+            path: "/",
+            maxAge: 3 * 24 * 60 * 60 * 1000
+        })
+
+        return res.redirect("http://localhost:3000")
+    } catch (err) {
+        console.log("Google callback failed:", err)
+
+        return res.redirect("http://localhost:3000/login")
+    }
+}

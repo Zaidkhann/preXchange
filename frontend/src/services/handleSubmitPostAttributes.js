@@ -1,3 +1,4 @@
+import { toast } from "@heroui/react";
 const handleSubmit = async (e,attributes,adTitle,description,price,location,year,images,categoryId,setLoading,resetForm) => {
     e.preventDefault();
     setLoading(true)
@@ -27,11 +28,11 @@ const handleSubmit = async (e,attributes,adTitle,description,price,location,year
                 message: data.message || "Failed to post Ad"
             }
         }
-        alert("Advertisement Posted Successfully")
+        toast.success("Your advertisement posted successfully")
         resetForm()
+        router.push("/")
     } catch (err) {
         console.log("Internal DATA ", err)
-        alert("Failed to post Ad")
         return
     }
     finally{

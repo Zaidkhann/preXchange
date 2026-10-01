@@ -55,7 +55,7 @@ function CategoryCard() {
                 </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8">
+            <div className="grid grid-cols-2 justify-items-center gap-x-6 gap-y-7 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8">
                 {categories.map((category) => (
                     
                     <div

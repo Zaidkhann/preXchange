@@ -1,3 +1,4 @@
+import {toast} from "@heroui/react"
 const handleSubmit = async (e, userName, email, password,router) => {
     e.preventDefault()
     try {
@@ -24,12 +25,13 @@ const handleSubmit = async (e, userName, email, password,router) => {
             console.log("Failed to find user with email")
             return data.message
         }
-        alert("Login Successfully")
+        toast.success("Login Succesfully")
         router.push("/")
         router.refresh()
 
     } catch (err) {
         console.log("INTERNAL ERROR TO LOGIN : ", err)
+        toast.danger("Login Failed")
         return
     }
 }

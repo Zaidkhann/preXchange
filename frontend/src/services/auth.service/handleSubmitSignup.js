@@ -1,3 +1,4 @@
+import {toast} from "@heroui/react"
 const handleSubmit = async (e,userName,email,password,location,phone,router)=>{
     e.preventDefault()
     try{
@@ -24,12 +25,13 @@ const handleSubmit = async (e,userName,email,password,location,phone,router)=>{
         console.log("Failed to create user")
         return data.message
     }
-    alert("User Created Successfully")
+    toast.success("Signup Successfully")
     router.push("/")
     router.refresh()
 
     }catch(err){
         console.log("INTERNAL ERROR TO CREATE USER: ",err)
+        toast.danger("Signup Failed")
         return
     }
 }

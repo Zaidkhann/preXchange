@@ -147,7 +147,7 @@ function UpdateProfile() {
                                     onChange={(e) =>
                                         setEmail(e.target.value)
                                     }
-                                    value={email}
+                                    value={email || ""}
                                     type="email"
                                     placeholder="you@example.com"
                                     className={inputClass}
@@ -168,7 +168,7 @@ function UpdateProfile() {
                                         onChange={(e) =>
                                             setPhone(e.target.value)
                                         }
-                                        value={phone}
+                                        value={phone || ""}
                                         type="tel"
                                         inputMode="numeric"
                                         placeholder="Enter phone number"
@@ -188,7 +188,7 @@ function UpdateProfile() {
                                     onChange={(e) =>
                                         setLocation(e.target.value)
                                     }
-                                    value={location}
+                                    value={location || ""}
                                     type="text"
                                     placeholder="Enter your location"
                                     className={inputClass}
@@ -204,7 +204,7 @@ function UpdateProfile() {
                                     onChange={(e) =>
                                         setPassword(e.target.value)
                                     }
-                                    value={password}
+                                    value={password || ""}
                                     type="password"
                                     placeholder="Leave blank to keep current password"
                                     minLength={6}

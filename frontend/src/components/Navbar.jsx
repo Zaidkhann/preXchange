@@ -1,4 +1,5 @@
 "use client"
+
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button, Dropdown, Label } from "@heroui/react";
@@ -29,6 +30,7 @@ export default function Navbar() {
     const [search, setSearch] = useState("")
     const [showLocation, setShowLocation] = useState(false)
 
+
     const handleLocation = () => {
         getLocation(setLocation)
     }
@@ -45,6 +47,10 @@ export default function Navbar() {
         }
 
         router.push(`/?${params.toString()}`)
+        window.scrollTo({
+            top: 800,
+            behavior: "smooth"
+        })
     }
 
     useEffect(() => {
@@ -79,7 +85,7 @@ export default function Navbar() {
 
     return (
         <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 shadow-[0_1px_8px_rgba(15,23,42,0.04)] backdrop-blur-xl">
-            <nav className="mx-auto flex h-[72px] max-w-7xl items-center gap-4 px-5 lg:gap-5 lg:px-6">
+            <nav className="relative mx-auto flex min-h-[128px] max-w-7xl flex-wrap items-start gap-2 px-3 py-3 sm:min-h-[72px] sm:items-center sm:gap-3 sm:px-5 sm:py-2 lg:h-[72px] lg:flex-nowrap lg:gap-5 lg:px-6 lg:py-0">
 
                 <div className="shrink-0">
                     <Image
@@ -87,19 +93,19 @@ export default function Navbar() {
                         alt="preXchange"
                         width={150}
                         height={40}
-                        className="h-auto w-36 transition-opacity duration-200 hover:opacity-90 lg:w-40"
+                        className="h-auto w-24 transition-opacity duration-200 hover:opacity-90 sm:w-32 lg:w-40"
                     />
                 </div>
 
-                <div className="relative">
+                <div className="relative ml-auto shrink-0 sm:ml-0">
                     <button
                         type="button"
                         onClick={() => setShowLocation(!showLocation)}
-                        className="group flex shrink-0 items-center gap-2 rounded-xl border border-transparent px-2.5 py-2.5 text-sm text-slate-600 transition-all duration-200 hover:border-slate-200 hover:bg-slate-50 lg:px-3"
+                        className="group flex items-center justify-center gap-2 rounded-xl border border-transparent px-2 py-2.5 text-sm text-slate-600 transition-all duration-200 hover:border-slate-200 hover:bg-slate-50 sm:px-2.5 lg:px-3"
                     >
-                        <MapPin className="h-[19px] w-[19px] shrink-0 text-[#0891B2] transition-transform duration-200 group-hover:scale-105" />
+                        <MapPin className="h-[20px] w-[20px] shrink-0 text-[#0891B2] transition-transform duration-200 group-hover:scale-105" />
 
-                        <div className="hidden text-left lg:block">
+                        <div className="hidden text-left sm:block">
                             <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">
                                 {location ? location.city : "Set"}
                             </p>
@@ -108,15 +114,14 @@ export default function Navbar() {
                                 {location ? location.state : "Location"}
 
                                 <ChevronDown
-                                    className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-200 ${showLocation ? "rotate-180" : ""
-                                        }`}
+                                    className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-200 ${showLocation ? "rotate-180" : ""}`}
                                 />
                             </p>
                         </div>
                     </button>
 
                     {showLocation && (
-                        <div className="absolute left-0 top-full z-[100] mt-2 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl shadow-slate-900/10">
+                        <div className="absolute right-0 top-full z-[100] mt-2 max-w-[calc(100vw-1rem)] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl shadow-slate-900/10 sm:left-0 sm:right-auto">
                             <LocationByCityApi
                                 onSelectLocation={(selectedLocation) => {
                                     setLocation(selectedLocation)
@@ -131,21 +136,35 @@ export default function Navbar() {
                     )}
                 </div>
 
-                <form onSubmit={handleSearch} className="relative min-w-0 flex-1">
-                    <Search className="absolute left-4 top-1/2 h-[19px] w-[19px] -translate-y-1/2 text-slate-400 transition-colors duration-200" />
+                <form
+                    onSubmit={handleSearch}
+                    className="order-last relative mt-1 w-full min-w-0 sm:order-none sm:mt-0 sm:flex-1"
+                >
+                    <Search className="absolute left-4 top-1/2 h-[19px] w-[19px] -translate-y-1/2 text-slate-400" />
 
                     <input
                         type="text"
                         onChange={(e) => setSearch(e.target.value)}
                         value={search}
                         placeholder="Search for products..."
-                        className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/80 pl-11 pr-4 text-sm font-medium text-slate-800 outline-none transition-all duration-200 placeholder:text-slate-400 hover:border-slate-300 hover:bg-white focus:border-[#0891B2] focus:bg-white focus:ring-4 focus:ring-[#0891B2]/10"
+                        className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50/80 pl-11 pr-14 text-sm font-medium text-slate-800 outline-none transition-all duration-200 placeholder:text-slate-400 hover:border-slate-300 hover:bg-white focus:border-[#0891B2] focus:bg-white focus:ring-4 focus:ring-[#0891B2]/10 sm:h-11"
                     />
+
+                    <button
+                        type="submit"
+                        className="absolute right-1.5 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg bg-[#0891B2] text-white transition-all duration-200 hover:bg-[#07819e] active:scale-95"
+                        aria-label="Search"
+                    >
+                        <Search className="h-4 w-4" />
+                    </button>
                 </form>
 
-                <Link href={`/chatpanel?uid=${user?.id}`}>
+                <Link
+                    href={`/chatpanel?uid=${user?.id}`}
+                    className={!user ? "hidden" : "shrink-0"}
+                >
                     <button
-                        className={!user ? `hidden` : `group flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-transparent text-slate-500 transition-all duration-200 hover:border-cyan-100 hover:bg-cyan-50 hover:text-[#0891B2] active:scale-95`}
+                        className="group flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-transparent text-slate-500 transition-all duration-200 hover:border-cyan-100 hover:bg-cyan-50 hover:text-[#0891B2] active:scale-95 sm:h-11 sm:w-11"
                     >
                         <MessagesCircle className="h-[19px] w-[19px] transition-transform duration-200 group-hover:scale-110" />
                     </button>
@@ -158,8 +177,18 @@ export default function Navbar() {
                             variant="secondary"
                             className="group flex shrink-0 items-center gap-2 rounded-xl border border-transparent bg-transparent px-1.5 py-1.5 text-slate-700 shadow-none transition-all duration-200 hover:border-slate-200 hover:bg-slate-50"
                         >
-                            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-50 text-[#0891B2] ring-1 ring-cyan-100 transition-all duration-200 group-hover:bg-cyan-100 group-hover:ring-cyan-200">
-                                <User className="h-[18px] w-[18px]" />
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-50 text-[#0891B2] ring-1 ring-cyan-100 transition-all duration-200 group-hover:bg-cyan-100 group-hover:ring-cyan-200 sm:h-9 sm:w-9">
+                                {user?.avatar ? (
+                                    <Image
+                                        src={user.avatar}
+                                        alt={user.userName[0]}
+                                        width={40}
+                                        height={40}
+                                        className="rounded-full"
+                                    />
+                                ) : (
+                                    <User className="h-[18px] w-[18px]" />
+                                )}
                             </div>
 
                             <span className="hidden max-w-28 truncate text-sm font-semibold text-slate-700 xl:block">
@@ -218,13 +247,16 @@ export default function Navbar() {
                         </Dropdown.Popover>
                     </Dropdown>
                 ) : (
-                    <Link href="/login">
+                    <Link href="/login" className="shrink-0">
                         <button
                             type="button"
-                            className="group flex items-center gap-2 rounded-xl border border-cyan-200 bg-cyan-50 px-4.5 py-2.5 text-sm font-semibold text-cyan-700 shadow-sm transition-all duration-200 hover:border-[#0891B2] hover:bg-[#0891B2] hover:text-white hover:shadow-md hover:shadow-cyan-200/40 active:scale-[0.97]"
+                            className="group flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-200 bg-cyan-50 text-cyan-700 shadow-sm transition-all duration-200 hover:border-[#0891B2] hover:bg-[#0891B2] hover:text-white hover:shadow-md hover:shadow-cyan-200/40 active:scale-[0.97] sm:h-auto sm:w-auto sm:gap-2 sm:px-4.5 sm:py-2.5"
                         >
                             <User className="h-[17px] w-[17px] transition-transform duration-200 group-hover:scale-105" />
-                            <span>Login</span>
+
+                            <span className="hidden sm:inline">
+                                Login
+                            </span>
 
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -232,7 +264,7 @@ export default function Navbar() {
                                 viewBox="0 0 24 24"
                                 strokeWidth={2}
                                 stroke="currentColor"
-                                className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+                                className="hidden h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 sm:block"
                             >
                                 <path
                                     strokeLinecap="round"
@@ -245,17 +277,20 @@ export default function Navbar() {
                 )}
 
                 {user ? (
-                    <Link href={"/post"}>
-                        <button className="group flex h-11 shrink-0 items-center gap-2 rounded-xl bg-[#0891B2] px-4.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#07819e] hover:shadow-lg hover:shadow-cyan-200/40 active:translate-y-0 active:scale-[0.98]">
+                    <Link
+                        href="/post"
+                        className="fixed bottom-5 left-1/2 z-[60] -translate-x-1/2 lg:static lg:translate-x-0"
+                    >
+                        <button className="group hidden h-12 items-center gap-2 rounded-full bg-[#0891B2] px-6 text-sm font-semibold text-white shadow-lg shadow-cyan-200/50 transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#07819e] hover:shadow-xl hover:shadow-cyan-200/60 active:translate-y-0 active:scale-[0.98] lg:flex lg:h-11 lg:rounded-xl lg:px-4.5 lg:shadow-sm">
                             <Plus className="h-5 w-5 transition-transform duration-300 group-hover:rotate-90" />
-                            Sell
+                            <span>Sell</span>
                         </button>
                     </Link>
-                ) : (
-                    null
-                )}
+                ) : null}
 
             </nav>
         </header>
     );
+
+
 }
