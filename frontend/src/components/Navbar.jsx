@@ -209,10 +209,18 @@ export default function Navbar() {
                                 <Dropdown.Item
                                     id="view-profile"
                                     textValue="View and Edit Profile"
-                                    className="rounded-lg px-3 py-2.5 transition-colors duration-150 hover:bg-slate-50"
+                                    className="rounded-xl px-3 py-2.5 outline-none transition-colors hover:bg-cyan-50"
                                 >
-                                    <User className="h-[18px] w-[18px] text-slate-500" />
-                                    <Label>View and Edit Profile</Label>
+                                    <Link
+                                        href="/user/profile"
+                                        className="flex w-full items-center gap-3"
+                                    >
+                                        <User className="h-[18px] w-[18px] text-slate-500" />
+
+                                        <span className="text-sm font-medium text-slate-700">
+                                            View and Edit Profile
+                                        </span>
+                                    </Link>
                                 </Dropdown.Item>
 
                                 <Dropdown.Item
@@ -220,18 +228,16 @@ export default function Navbar() {
                                     textValue="My Ads"
                                     className="rounded-lg px-3 py-2.5 transition-colors duration-150 hover:bg-slate-50"
                                 >
+                                    <Link
+                                        href="/user/my-ads"
+                                        className="flex w-full items-center gap-3"
+                                    >
                                     <Package className="h-[18px] w-[18px] text-slate-500" />
                                     <Label>My Ads</Label>
+                                    </Link>
                                 </Dropdown.Item>
 
-                                <Dropdown.Item
-                                    id="settings"
-                                    textValue="Settings"
-                                    className="rounded-lg px-3 py-2.5 transition-colors duration-150 hover:bg-slate-50"
-                                >
-                                    <Settings className="h-[18px] w-[18px] text-slate-500" />
-                                    <Label>Settings</Label>
-                                </Dropdown.Item>
+          
 
                                 <Dropdown.Item
                                     id="logout"

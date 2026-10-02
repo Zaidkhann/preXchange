@@ -58,8 +58,44 @@ async function getProductById(productId){
 }
 
 
+const editProduct = async(
+    productId,
+    adTitle,
+    description,
+    price,
+    location,
+    year,
+    attributes
+
+)=>{
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/update-product/${productId}`, {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify({
+                ...(adTitle && { adTitle }),
+                ...(description && { description }),
+                ...(price !== undefined && { price }),
+                ...(location && { location }),
+                ...(year && { year }),
+                // ...(image && { image }),
+                ...(attributes && { attributes }),
+
+            })
+            ,
+            headers: {
+                "Content-Type": "application/json"
+            }
+
+        })
+        const data = await res.json()
+        return data
+    } catch (error) {
+        console.log("Failed to update product Internal error ", error)
+        return ""
+    }
+}
 
 
+export {productsByCategoryId,getAllProducts,getProductById,editProduct}
 
-
-export {productsByCategoryId,getAllProducts,getProductById}

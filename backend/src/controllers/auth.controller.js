@@ -204,8 +204,14 @@ export const getCurrentUser = async (req, res) => {
                 userName: true,
                 phone: true,
                 location: true,
-                avatar: true
-            }
+                avatar: true,
+                products:{
+                    include:{
+                        image:true
+                    }
+                }
+            },
+            
         });
 
         if (!user) {

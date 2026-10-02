@@ -17,7 +17,7 @@ const updateProfile = async (userName, email, phone, password, location, avatar)
             }
 
         })
-        const data = res.json
+        const data = await res.json()
         return data
     } catch (error) {
         console.log("Failed to update profile Internal error ", error)

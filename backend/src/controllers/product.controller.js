@@ -244,7 +244,6 @@ export const fetchProductsByFilter = async (req, res) => {
 export const fetchProductById = async (req, res) => {
     try {
         const productId = Number(req.params.productId)
-        console.log(productId)
         const product = await prisma.product.findFirst({
             where: {
                 id: productId
@@ -273,5 +272,45 @@ export const fetchProductById = async (req, res) => {
             success: false,
             message: "Failed to get product by id"
         })
+    }
+}
+
+
+export const editProduct = async(req,res) => {
+    try{
+        const productId = Number(req.params.productId)
+        // const userId = req.user.userId
+        const {
+            adTitle,
+            description,
+            price,
+            location,
+            year,
+            attributes,
+        } = req.body
+        const updatedProduct = await prisma.product.update({
+            where:{
+                id:productId,
+            },
+            data:{
+                ...(adTitle !== undefined && {adTitle}),
+                ...(description !== undefined && {description}),
+                ...(location !== undefined && {location}),
+                ...(year !== undefined && {year}),
+                ...(attributes !== undefined && {attributes}),
+                ...(price !== undefined && {price})
+            }
+        })
+        return res.status(200).json({
+            message: "Product updated successfully",
+            product: updatedProduct
+        })
+
+    }catch(err){
+        console.log("Failed to update product, ",err)
+        return res.json({
+            success: false,
+            message: "Failed to edit product "
+        }) 
     }
 }
