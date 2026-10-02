@@ -1,16 +1,20 @@
 "use client"
 
-import { getCurrentUser } from "../services/me"
+import { getCurrentUser } from "../services/me.js"
+import { deleteProduct } from "../services/productService.js"
 import React, { useEffect, useState } from "react"
-import {useRouter} from "next/navigation"
+import { useRouter } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
 import { MoreVertical, Pencil, CheckCircle2, Trash2 } from "lucide-react"
+import { toast } from "@heroui/react"
 
 function MyAds() {
     const [user, setUser] = useState(null)
     const [products, setProducts] = useState([])
     const [openMenu, setOpenMenu] = useState(null)
+    const [deleteProductId, setDeleteProductId] = useState(null)
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
     const router = useRouter()
 
     useEffect(() => {
@@ -29,8 +33,48 @@ function MyAds() {
         fetchUser()
     }, [])
 
+
     return (
         <section className="w-full">
+            {showDeleteModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+                    <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+                        <h2 className="text-lg font-semibold text-slate-900">
+                            Remove this ad?
+                        </h2>
+
+                        <p className="mt-2 text-sm text-slate-500">
+                            Are you sure you want to remove this ad? This action cannot be undone.
+                        </p>
+
+                        <div className="mt-6 flex justify-end gap-3">
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setShowDeleteModal(false)
+                                    setDeleteProductId(null)
+                                }}
+                                className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={async () => {
+                                    await deleteProduct(deleteProductId)
+                                    toast.danger("Advertise deleted")
+                                    setShowDeleteModal(false)
+                                    setDeleteProductId(null)
+                                }}
+                                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
+                            >
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
             <div className="mb-6">
                 <h2 className="text-2xl font-bold tracking-tight text-slate-900">
                     My Ads
@@ -90,11 +134,10 @@ function MyAds() {
                                         )}
 
                                         <div
-                                            className={`absolute left-2 top-2 rounded-full px-2.5 py-1 text-xs font-bold shadow-sm ${
-                                                product.isSold
+                                            className={`absolute left-2 top-2 rounded-full px-2.5 py-1 text-xs font-bold shadow-sm ${product.isSold
                                                     ? "bg-green-500 text-white"
                                                     : "bg-white/95 text-cyan-700"
-                                            }`}
+                                                }`}
                                         >
                                             {product.isSold ? "Sold" : "Active"}
                                         </div>
@@ -113,11 +156,10 @@ function MyAds() {
                                             </div>
 
                                             <span
-                                                className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${
-                                                    product.isSold
+                                                className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${product.isSold
                                                         ? "bg-green-50 text-green-700 ring-1 ring-green-200"
                                                         : "bg-cyan-50 text-cyan-700 ring-1 ring-cyan-200"
-                                                }`}
+                                                    }`}
                                             >
                                                 {product.isSold
                                                     ? "✓ Sold"
@@ -214,10 +256,8 @@ function MyAds() {
                                         <button
                                             type="button"
                                             onClick={() => {
-                                                console.log(
-                                                    "Delete product:",
-                                                    product.id
-                                                )
+                                                setDeleteProductId(product.id)
+                                                setShowDeleteModal(true)
                                                 setOpenMenu(null)
                                             }}
                                             className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-red-600 transition hover:bg-red-50"

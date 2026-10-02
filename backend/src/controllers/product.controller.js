@@ -314,3 +314,43 @@ export const editProduct = async(req,res) => {
         }) 
     }
 }
+
+
+
+
+
+export const deleteProduct = async(req,res) => {
+    try{
+        const userId = req.user.userId
+        const productId = Number(req.params.productId)
+        const product = await prisma.product.findFirst({
+            where:{
+                id:productId,
+                userId:userId
+            }
+        })
+        if(!product){
+            return res.status(404).json({
+                success:false,
+                message: "Product not found"
+            })
+        }
+        const deletedProduct = await prisma.product.delete({
+            where:{
+                id: productId
+            }
+        })
+        return res.status(200).json({
+            success: true,
+            message: "Product Deleted",
+            product: deletedProduct
+        })
+
+    }catch(err){
+        console.log("Failed to Delete Product Internal error", err)
+        return res.status(500).json({
+            success: false,
+            message: "Failed to Delete Product "
+        })
+    }
+}

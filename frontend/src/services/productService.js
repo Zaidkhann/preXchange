@@ -97,5 +97,22 @@ const editProduct = async(
 }
 
 
-export {productsByCategoryId,getAllProducts,getProductById,editProduct}
+
+const deleteProduct = async(productId)=>{
+    try{
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/delete-product/${productId}`,{
+            credentials:"include",
+            method:"DELETE",
+        })
+        const data = res.json()
+        return data
+    } catch (error) {
+        console.log("Failed to delete product Internal error ", error)
+        return ""
+    }
+}
+
+
+
+export {productsByCategoryId,getAllProducts,getProductById,editProduct, deleteProduct}
 
