@@ -201,7 +201,7 @@ function login() {
 
 
                                 <button
-                                    type="submit"
+                                    type="submit" 
                                     className="w-full h-12 mt-2 rounded-xl bg-[#0891B2] text-white font-semibold shadow-lg shadow-cyan-600/20 transition-all duration-200 hover:bg-[#0e7490] hover:shadow-cyan-600/30 active:scale-[0.98]"
                                 >
                                     Sign In
@@ -212,7 +212,6 @@ function login() {
                                 type="button"
                                 onClick={()=>{
                                     window.location.href = "http://localhost:5000/api/auth/google"
-                                    toast.success("Logged In")
 
                                 }}
                                 className="group relative flex h-12 w-full items-center justify-center gap-3 overflow-hidden rounded-xl border border-gray-200 bg-white px-5 text-sm font-semibold text-gray-700 shadow-sm transition-all duration-200 hover:border-gray-300 hover:bg-gray-50 hover:shadow-md active:scale-[0.98]"

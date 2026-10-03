@@ -5,12 +5,16 @@ export const handleLogout = async(router) =>{
             credentials:"include"
         })
         const data = await res.json()
-        router.push("/login")
+        setTimeout(()=>{
+        window.location.reload()
+
+    },200)
+            router.push("/login")
         return data.message   
     }catch(err){
         console.log("failed to logout")
         return
-    }
+    }   
 }
 
 

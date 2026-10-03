@@ -2,6 +2,7 @@
 
 import { getCurrentUser } from "../services/me.js"
 import { deleteProduct } from "../services/productService.js"
+import { editProduct } from "../services/productService.js"
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
@@ -15,6 +16,8 @@ function MyAds() {
     const [openMenu, setOpenMenu] = useState(null)
     const [deleteProductId, setDeleteProductId] = useState(null)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
+    const [markAsSoldProductId, setMarkAsSoldProductId] = useState(null)
+    const [showMarkasSoldModal, setShowMarkAsSoldModal] = useState(false)
     const router = useRouter()
 
     useEffect(() => {
@@ -32,6 +35,8 @@ function MyAds() {
 
         fetchUser()
     }, [])
+
+
 
 
     return (
@@ -75,6 +80,59 @@ function MyAds() {
                     </div>
                 </div>
             )}
+            {showMarkasSoldModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+                    <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+                        <h2 className="text-lg font-semibold text-slate-900">
+                            Mark as Sold
+                        </h2>
+
+                        <p className="mt-2 text-sm text-slate-500">
+                            Are you sure you want to Mark as sold?
+                        </p>
+
+                        <div className="mt-6 flex justify-end gap-3">
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setShowMarkAsSoldModal(false)
+                                    setMarkAsSoldProductId(null)
+                                }}
+                                className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={async () => {
+                                    await editProduct(markAsSoldProductId,
+                                        undefined,
+                                        undefined,
+                                        undefined,
+                                        undefined,
+                                        undefined,
+                                        undefined,
+                                        true)
+                                    setProducts((prevProducts) =>
+                                        prevProducts.map((product) =>
+                                            product.id === markAsSoldProductId
+                                                ? { ...product, isSold: true }
+                                                : product
+                                        )
+                                    )
+                                    toast.success("Congratulations your product has been sold.")
+                                    setShowMarkAsSoldModal(false)
+                                    setMarkAsSoldProductId(null)
+                                }}
+                                className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
+                            >
+                                Mark as Sold
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
             <div className="mb-6">
                 <h2 className="text-2xl font-bold tracking-tight text-slate-900">
                     My Ads
@@ -113,161 +171,237 @@ function MyAds() {
                             key={product.id}
                             className="group relative"
                         >
-                            <Link
-                                href={`/product/${product.id}`}
-                                className="block"
-                            >
-                                <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 pr-14 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-200 hover:shadow-md sm:flex-row sm:items-center">
-
-                                    <div className="relative h-36 w-full shrink-0 overflow-hidden rounded-xl bg-slate-100 sm:h-28 sm:w-36">
-                                        {product.image?.[0]?.url ? (
-                                            <Image
-                                                src={product.image[0].url}
-                                                alt={product.adTitle}
-                                                fill
-                                                className="object-cover transition duration-300 group-hover:scale-105"
-                                            />
-                                        ) : (
-                                            <div className="flex h-full items-center justify-center text-sm text-slate-400">
-                                                No Image
-                                            </div>
-                                        )}
-
-                                        <div
-                                            className={`absolute left-2 top-2 rounded-full px-2.5 py-1 text-xs font-bold shadow-sm ${product.isSold
-                                                    ? "bg-green-500 text-white"
-                                                    : "bg-white/95 text-cyan-700"
-                                                }`}
-                                        >
-                                            {product.isSold ? "Sold" : "Active"}
-                                        </div>
-                                    </div>
-
-                                    <div className="min-w-0 flex-1">
-                                        <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                                            <div className="min-w-0">
-                                                <h3 className="truncate text-lg font-semibold text-slate-900 transition group-hover:text-cyan-700">
-                                                    {product.adTitle}
-                                                </h3>
-
-                                                <p className="mt-1 text-xl font-bold text-slate-900">
-                                                    ₹{product.price?.toLocaleString("en-IN")}
-                                                </p>
-                                            </div>
-
-                                            <span
-                                                className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${product.isSold
-                                                        ? "bg-green-50 text-green-700 ring-1 ring-green-200"
-                                                        : "bg-cyan-50 text-cyan-700 ring-1 ring-cyan-200"
-                                                    }`}
-                                            >
-                                                {product.isSold
-                                                    ? "✓ Sold"
-                                                    : "● Active"}
-                                            </span>
-                                        </div>
-
-                                        <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500">
-                                            {product.location && (
-                                                <span className="flex items-center gap-1">
-                                                    📍 {product.location}
-                                                </span>
+                            {product.isSold ? (
+                                <div className="block cursor-not-allowed">
+                                    <div className="relative flex flex-col gap-4 rounded-2xl border border-slate-200 bg-slate-100/80 p-4 pr-14 opacity-60 sm:flex-row sm:items-center">
+                                        <div className="relative h-36 w-full shrink-0 overflow-hidden rounded-xl bg-slate-200 sm:h-28 sm:w-36">
+                                            {product.image?.[0]?.url ? (
+                                                <Image
+                                                    src={product.image[0].url}
+                                                    alt={product.adTitle}
+                                                    fill
+                                                    className="object-cover grayscale"
+                                                />
+                                            ) : (
+                                                <div className="flex h-full items-center justify-center text-sm text-slate-400">
+                                                    No Image
+                                                </div>
                                             )}
 
-                                            <span>
-                                                Listed{" "}
-                                                {new Date(
-                                                    product.createdAt
-                                                ).toLocaleDateString("en-IN", {
-                                                    day: "numeric",
-                                                    month: "short",
-                                                    year: "numeric",
-                                                })}
-                                            </span>
+                                            <div className="absolute inset-0 flex items-center justify-center">
+                                                <span className="rounded-lg bg-green-600 px-4 py-2 text-sm font-bold text-white shadow-lg">
+                                                    Mark as Sold
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div className="hidden shrink-0 text-slate-300 transition group-hover:text-cyan-500 sm:block">
-                                        →
+                                        <div className="min-w-0 flex-1">
+                                            <h3 className="truncate text-lg font-semibold text-slate-600">
+                                                {product.adTitle}
+                                            </h3>
+
+                                            <p className="mt-1 text-xl font-bold text-slate-600">
+                                                ₹{product.price?.toLocaleString("en-IN")}
+                                            </p>
+
+                                            <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-400">
+                                                {product.location && (
+                                                    <span>📍 {product.location}</span>
+                                                )}
+
+                                                <span>
+                                                    Listed{" "}
+                                                    {new Date(product.createdAt).toLocaleDateString(
+                                                        "en-IN",
+                                                        {
+                                                            day: "numeric",
+                                                            month: "short",
+                                                            year: "numeric",
+                                                        }
+                                                    )}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <span className="absolute right-4 top-4 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700 ring-1 ring-green-200">
+                                            ✓ Sold
+                                        </span>
                                     </div>
                                 </div>
-                            </Link>
-
-                            <div className="absolute right-3 top-3 z-20">
-                                <button
-                                    type="button"
-                                    onClick={(e) => {
-                                        e.preventDefault()
-                                        e.stopPropagation()
-                                        setOpenMenu(
-                                            openMenu === product.id
-                                                ? null
-                                                : product.id
-                                        )
-                                    }}
-                                    className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
-                                    aria-label="Ad options"
+                            ) :
+                                (<Link
+                                    href={`/product/${product.id}`}
+                                    className="block"
                                 >
-                                    <MoreVertical size={20} />
-                                </button>
+                                    <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 pr-14 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-200 hover:shadow-md sm:flex-row sm:items-center">
 
-                                {openMenu === product.id && (
-                                    <div
+                                        <div className="relative h-36 w-full shrink-0 overflow-hidden rounded-xl bg-slate-100 sm:h-28 sm:w-36">
+                                            {product.image?.[0]?.url ? (
+                                                <Image
+                                                    src={product.image[0].url}
+                                                    alt={product.adTitle}
+                                                    fill
+                                                    className="object-cover transition duration-300 group-hover:scale-105"
+                                                />
+                                            ) : (
+                                                <div className="flex h-full items-center justify-center text-sm text-slate-400">
+                                                    No Image
+                                                </div>
+                                            )}
+
+                                            <div
+                                                className={`absolute left-2 top-2 rounded-full px-2.5 py-1 text-xs font-bold shadow-sm ${product.isSold
+                                                    ? "bg-green-500 text-white"
+                                                    : "bg-white/95 text-cyan-700"
+                                                    }`}
+                                            >
+                                                {product.isSold ? "Sold" : "Active"}
+                                            </div>
+                                        </div>
+
+                                        <div className="min-w-0 flex-1">
+                                            <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                                                <div className="min-w-0">
+                                                    <h3 className="truncate text-lg font-semibold text-slate-900 transition group-hover:text-cyan-700">
+                                                        {product.adTitle}
+                                                    </h3>
+
+                                                    <p className="mt-1 text-xl font-bold text-slate-900">
+                                                        ₹{product.price?.toLocaleString("en-IN")}
+                                                    </p>
+                                                </div>
+
+                                                <span
+                                                    className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${product.isSold
+                                                        ? "bg-green-50 text-green-700 ring-1 ring-green-200"
+                                                        : "bg-cyan-50 text-cyan-700 ring-1 ring-cyan-200"
+                                                        }`}
+                                                >
+                                                    {product.isSold
+                                                        ? "✓ Sold"
+                                                        : "● Active"}
+                                                </span>
+                                            </div>
+
+                                            <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500">
+                                                {product.location && (
+                                                    <span className="flex items-center gap-1">
+                                                        📍 {product.location}
+                                                    </span>
+                                                )}
+
+                                                <span>
+                                                    Listed{" "}
+                                                    {new Date(
+                                                        product.createdAt
+                                                    ).toLocaleDateString("en-IN", {
+                                                        day: "numeric",
+                                                        month: "short",
+                                                        year: "numeric",
+                                                    })}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div className="hidden shrink-0 text-slate-300 transition group-hover:text-cyan-500 sm:block">
+                                            →
+                                        </div>
+                                    </div>
+                                </Link>
+                                )
+                            }
+
+                            {product.isSold ? (
+                                <div className="absolute right-3 top-10 z-20">
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setDeleteProductId(product.id)
+                                            setShowDeleteModal(true)
+                                            setOpenMenu(null)
+                                        }}
+                                        className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-red-600 transition hover:bg-red-50"
+                                    >
+                                        <Trash2 size={17} />
+                                        Remove
+                                    </button>
+                                </div>
+                            ) : (
+
+                                <div className="absolute right-3 top-3 z-20">
+                                    <button
+                                        type="button"
                                         onClick={(e) => {
                                             e.preventDefault()
                                             e.stopPropagation()
+                                            setOpenMenu(
+                                                openMenu === product.id
+                                                    ? null
+                                                    : product.id
+                                            )
                                         }}
-                                        className="absolute right-0 top-11 w-48 overflow-hidden rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl shadow-slate-200/60"
+                                        className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+                                        aria-label="Ad options"
                                     >
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                router.push(`/user/my-ads/update-product?prodId=${product.id}`)
-                                                setOpenMenu(null)
-                                            }}
-                                            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
-                                        >
-                                            <Pencil
-                                                size={17}
-                                                className="text-slate-500"
-                                            />
-                                            Edit
-                                        </button>
+                                        <MoreVertical size={20} />
+                                    </button>
 
-                                        {!product.isSold && (
+                                    {openMenu === product.id && (
+                                        <div
+                                            onClick={(e) => {
+                                                e.preventDefault()
+                                                e.stopPropagation()
+                                            }}
+                                            className="absolute right-0 top-11 w-48 overflow-hidden rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl shadow-slate-200/60"
+                                        >
                                             <button
                                                 type="button"
                                                 onClick={() => {
-                                                    console.log(
-                                                        "Mark as sold:",
-                                                        product.id
-                                                    )
+                                                    router.push(`/user/my-ads/update-product?prodId=${product.id}`)
                                                     setOpenMenu(null)
                                                 }}
-                                                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-green-700 transition hover:bg-green-50"
+                                                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
                                             >
-                                                <CheckCircle2 size={17} />
-                                                Mark as Sold
+                                                <Pencil
+                                                    size={17}
+                                                    className="text-slate-500"
+                                                />
+                                                Edit
                                             </button>
-                                        )}
 
-                                        <div className="my-1 border-t border-slate-100" />
+                                            {!product.isSold && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setShowMarkAsSoldModal(true)
+                                                        setMarkAsSoldProductId(product.id)
+                                                        setOpenMenu(null)
+                                                    }}
+                                                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-green-700 transition hover:bg-green-50"
+                                                >
+                                                    <CheckCircle2 size={17} />
+                                                    Mark as Sold
+                                                </button>
+                                            )}
 
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                setDeleteProductId(product.id)
-                                                setShowDeleteModal(true)
-                                                setOpenMenu(null)
-                                            }}
-                                            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-red-600 transition hover:bg-red-50"
-                                        >
-                                            <Trash2 size={17} />
-                                            Remove
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
+                                            <div className="my-1 border-t border-slate-100" />
+
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setDeleteProductId(product.id)
+                                                    setShowDeleteModal(true)
+                                                    setOpenMenu(null)
+                                                }}
+                                                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-red-600 transition hover:bg-red-50"
+                                            >
+                                                <Trash2 size={17} />
+                                                Remove
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>

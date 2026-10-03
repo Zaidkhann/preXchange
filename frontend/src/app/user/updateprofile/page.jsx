@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react"
 import updateProfile from "../../../services/updateProfile.js"
 import {User2Icon} from "lucide-react"
 import {getCurrentUser} from "../../../services/me.js"
+import {toast} from "@heroui/react"
+import { useRouter } from "next/navigation.js"
 
 function UpdateProfile() {
     const [userName, setUserName] = useState("")
@@ -12,6 +14,11 @@ function UpdateProfile() {
     const [password, setPassword] = useState("")
     const [location, setLocation] = useState("")
     const [avatar, setAvatar] = useState("")
+    const [loading,setLoading] = useState(false)
+
+    const router = useRouter()
+
+
     useEffect(()=>{
         const fetchUser = async()=>{
             const user = await getCurrentUser()
@@ -26,7 +33,18 @@ function UpdateProfile() {
 
     const inputClass =
         "w-full h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-200 focus:border-[#0891B2] focus:bg-white focus:ring-4 focus:ring-cyan-500/10"
-
+    if(loading){
+      
+        return (
+            <div className="flex min-h-[60vh] items-center justify-center bg-white">
+                <div className="relative h-12 w-12">
+                    <div className="absolute inset-0 animate-spin rounded-full border-4 border-gray-100 border-t-cyan-500" />
+                    <div className="absolute inset-2 rounded-full bg-cyan-50" />
+                </div>
+            </div>
+        )
+    
+    }
     return (
         <div className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-3xl">
@@ -46,16 +64,22 @@ function UpdateProfile() {
                 </div>
 
                 <form
-                    onSubmit={(e) => {
+                    onSubmit={async(e) => {
                         e.preventDefault()
-                        updateProfile(
+                        const data = await updateProfile(
                             userName,
-                            email,
                             phone,
                             password,
                             location,
-                            avatar
+                            avatar,
+                            setLoading
                         )
+                        if (data?.success) {
+                            toast.success("Profile updated successfully")
+                        } else {
+                            toast.danger( "Failed to update profile")
+                        }
+                        router.back()
                     }}
                     className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
                 >
@@ -143,15 +167,11 @@ function UpdateProfile() {
                                     Email
                                 </label>
 
-                                <input
-                                    onChange={(e) =>
-                                        setEmail(e.target.value)
-                                    }
-                                    value={email || ""}
-                                    type="email"
-                                    placeholder="you@example.com"
-                                    className={inputClass}
-                                />
+                                <div
+                                    className="w-full h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 cursor-not-allowed bg-slate-100 text-slate-500"
+                                >
+                                {email}
+                                </div>
                             </div>
 
                             <div>
@@ -229,9 +249,10 @@ function UpdateProfile() {
 
                         <button
                             type="submit"
+                            disabled={loading}
                             className="h-11 rounded-xl bg-[#0891B2] px-6 text-sm font-semibold text-white shadow-sm shadow-cyan-600/20 transition-all duration-200 hover:bg-[#0e7490] hover:shadow-md hover:shadow-cyan-600/20 active:scale-[0.98]"
                         >
-                            Update profile
+                            {loading? (<span>updating...</span>):(<span>Update profile</span>)}
                         </button>
                     </div>
                 </form>

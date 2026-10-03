@@ -1,4 +1,5 @@
 import {toast} from "@heroui/react"
+
 const handleSubmit = async (e, userName, email, password,router) => {
     e.preventDefault()
     try {
@@ -20,7 +21,10 @@ const handleSubmit = async (e, userName, email, password,router) => {
             }
         )
         const data = await res.json()
-        if (!res.ok) {
+
+   
+     if (!res.ok) {
+            
             alert("Failed to find user with this email or username")
             console.log("Failed to find user with email")
             return data.message
@@ -28,6 +32,9 @@ const handleSubmit = async (e, userName, email, password,router) => {
         toast.success("Login Succesfully")
         router.push("/")
         router.refresh()
+        setTimeout(()=>{
+            window.location.reload()
+        },500)
 
     } catch (err) {
         console.log("INTERNAL ERROR TO LOGIN : ", err)

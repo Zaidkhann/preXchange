@@ -1,11 +1,11 @@
-const updateProfile = async (userName, email, phone, password, location, avatar) => {
+const updateProfile = async (userName, phone, password, location, avatar,setLoading) => {
     try {
+        setLoading(true)
         const res = await fetch("http://localhost:5000/api/user/updateprofile", {
             method: "POST",
             credentials: "include",
             body: JSON.stringify({
                 ...(userName && { userName }),
-                ...(email && { email }),
                 ...(phone && { phone }),
                 ...(password && { password }),
                 ...(location && { location }),
@@ -22,6 +22,9 @@ const updateProfile = async (userName, email, phone, password, location, avatar)
     } catch (error) {
         console.log("Failed to update profile Internal error ", error)
         return ""
+    }
+    finally{
+        setLoading(false)
     }
 }
 export default updateProfile

@@ -7,6 +7,8 @@ import { handleLogout } from "@/services/auth.service/handleLogout.js"
 import { getCurrentUser } from "@/services/me.js"
 import { getLocation } from "@/services/locationFetch.js"
 import LocationByCityApi from "@/components/location.jsx"
+
+
 import {
     MessagesCircle,
     MapPin,
@@ -20,6 +22,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { REACT_LOADABLE_MANIFEST } from "next/dist/shared/lib/constants";
 
 export default function Navbar() {
     const router = useRouter()
@@ -29,6 +32,7 @@ export default function Navbar() {
     const [location, setLocation] = useState(null)
     const [search, setSearch] = useState("")
     const [showLocation, setShowLocation] = useState(false)
+    const[showLogoutModal,setShowLogoutModal] = useState(false)
 
 
     const handleLocation = () => {
@@ -84,6 +88,44 @@ export default function Navbar() {
     }
 
     return (
+        <div>
+
+        {showLogoutModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+                    <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+                        <h2 className="text-lg font-semibold text-slate-900">
+                            Logout 
+                        </h2>
+
+                        <p className="mt-2 text-sm text-slate-500">
+                            Are you sure you want to Logout?
+                        </p>
+
+                        <div className="mt-6 flex justify-end gap-3">
+                            <button
+                                type="button"
+                                onClick=
+                                    {() => setShowLogoutModal(false)}
+                                
+                                className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={async () => {
+                            await handleLogout(router)
+                            setShowLogoutModal(false)
+                        }}
+                                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
+                            >
+                                Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 shadow-[0_1px_8px_rgba(15,23,42,0.04)] backdrop-blur-xl">
             <nav className="relative mx-auto flex min-h-[128px] max-w-7xl flex-wrap items-start gap-2 px-3 py-3 sm:min-h-[72px] sm:items-center sm:gap-3 sm:px-5 sm:py-2 lg:h-[72px] lg:flex-nowrap lg:gap-5 lg:px-6 lg:py-0">
 
@@ -130,6 +172,7 @@ export default function Navbar() {
                                 onCurrentLocation={() => {
                                     handleLocation()
                                     setShowLocation(false)
+                                    
                                 }}
                             />
                         </div>
@@ -242,7 +285,7 @@ export default function Navbar() {
                                 <Dropdown.Item
                                     id="logout"
                                     textValue="Logout"
-                                    onClick={() => handleLogout(router)}
+                                    onClick={()=>setShowLogoutModal(true)}
                                     variant="danger"
                                     className="mt-1 rounded-lg px-3 py-2.5 transition-colors duration-150 hover:bg-red-50"
                                 >
@@ -296,6 +339,7 @@ export default function Navbar() {
 
             </nav>
         </header>
+        </div>
     );
 
 

@@ -65,7 +65,8 @@ const editProduct = async(
     price,
     location,
     year,
-    attributes
+    attributes,
+    isSold
 
 )=>{
     try {
@@ -80,6 +81,7 @@ const editProduct = async(
                 ...(year && { year }),
                 // ...(image && { image }),
                 ...(attributes && { attributes }),
+                ...(isSold !== undefined && { isSold }),
 
             })
             ,

@@ -93,7 +93,9 @@ export const fetchAllProducts = async (req, res) => {
         const limit = Math.min(Math.max(Number(req.query.limit) || 10, 1), 50)
         const skip = (page - 1) * limit
         const search = req.query.search?.trim()
-        const where = search ? {
+        const where ={
+                isSold:false,
+        ...(search ? {
             OR: [
                 {
                     adTitle: {
@@ -117,7 +119,9 @@ export const fetchAllProducts = async (req, res) => {
                     }
                 }
             ]
-        } : {}
+        }
+        : {})
+    }
 
         const [products, totalProducts] = await Promise.all([
             prisma.product.findMany({
@@ -136,6 +140,7 @@ export const fetchAllProducts = async (req, res) => {
                     image: true,
                     category: true
                 },
+                
 
             }),
             prisma.product.count({ where })
@@ -190,6 +195,7 @@ export const fetchProductsByFilter = async (req, res) => {
                 lte: beforeYear,
                 gte: afterYear
             },
+            isSold:false
         }
 
         const [products, totalProducts] = await Promise.all([
@@ -287,6 +293,7 @@ export const editProduct = async(req,res) => {
             location,
             year,
             attributes,
+            isSold,
         } = req.body
         const updatedProduct = await prisma.product.update({
             where:{
@@ -298,7 +305,8 @@ export const editProduct = async(req,res) => {
                 ...(location !== undefined && {location}),
                 ...(year !== undefined && {year}),
                 ...(attributes !== undefined && {attributes}),
-                ...(price !== undefined && {price})
+                ...(price !== undefined && {price}),
+                ...(isSold !== undefined && {isSold})
             }
         })
         return res.status(200).json({
