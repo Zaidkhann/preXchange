@@ -213,7 +213,7 @@ function signup() {
                                 <button
                                     type="button"
                                     onClick={() => {
-                                        window.location.href = "http://localhost:5000/api/auth/google"
+                                        window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`
                                         toast.success("Signup Successfully")
                                     }}
                                     className="group relative flex h-12 w-full items-center justify-center gap-3 overflow-hidden rounded-xl border border-gray-200 bg-white px-5 text-sm font-semibold text-gray-700 shadow-sm transition-all duration-200 hover:border-gray-300 hover:bg-gray-50 hover:shadow-md active:scale-[0.98]"
