@@ -5,7 +5,7 @@ import {Server} from "socket.io"
 import prisma from "./src/lib/prisma.js";
 const startServer = ()=>{
     try{
-        const PORT = process.env.PORT || 3000;
+        const PORT = process.env.PORT || 5000;
         const server = createServer(app)
         const io = new Server(server,
             {
