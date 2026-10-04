@@ -22,7 +22,6 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { REACT_LOADABLE_MANIFEST } from "next/dist/shared/lib/constants";
 
 export default function Navbar() {
     const router = useRouter()
