@@ -148,7 +148,7 @@ export default function Navbar() {
                     >
                         <MapPin className="h-[20px] w-[20px] shrink-0 text-[#0891B2] transition-transform duration-200 group-hover:scale-105" />
 
-                        <div className="hidden text-left sm:block">
+                        <div className="flex max-w-[90px] flex-col text-left sm:max-w-none">
                             <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">
                                 {location ? location.city : "Set"}
                             </p>
