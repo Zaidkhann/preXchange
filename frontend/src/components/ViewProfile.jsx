@@ -28,7 +28,6 @@ function ViewProfile() {
                 return
             }
 
-            console.log(data)
             setUser(data)
         }
 

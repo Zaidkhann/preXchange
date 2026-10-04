@@ -21,6 +21,7 @@ const handleSubmit = async (e, userName, email, password,router) => {
             }
         )
         const data = await res.json()
+        // console.log(data)
 
    
      if (!res.ok) {

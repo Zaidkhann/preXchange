@@ -1,4 +1,6 @@
 import prisma from "../lib/prisma.js";
+import bcrypt from "bcryptjs";
+
 
 export const updateprofile = async(req,res)=>{
     try{
@@ -10,6 +12,9 @@ export const updateprofile = async(req,res)=>{
         password, 
         phone} = req.body
         const userId = req.user.userId
+
+        const hashedPassword = await bcrypt.hash(password,10)
+
         const updatedUser = await prisma.user.update({
             
                 where:{
@@ -20,7 +25,7 @@ export const updateprofile = async(req,res)=>{
                     ...(email !== undefined && {email}),
                     ...(avatar !== undefined && {avatar}),
                     ...(location !== undefined && {location}),
-                    ...(password !== undefined && {password}),
+                    ...(password !== undefined && {password:hashedPassword}),
                     ...(phone !== undefined && {phone}),
                 }
         })    

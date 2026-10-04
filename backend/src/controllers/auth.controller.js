@@ -1,9 +1,10 @@
 import jwt from "jsonwebtoken"
 import prisma from "../lib/prisma.js";
 import bcrypt from "bcryptjs"
-import { response } from "express";
-export const signupUser = async (req,res)=>{
-    try{
+import { sendEmail } from "../utils/emailService.js";
+import {signupEmail, loginEmail} from "../emails/auth.email.js"
+export const signupUser = async (req, res) => {
+    try {
         let {
             email,
             password,
@@ -13,14 +14,14 @@ export const signupUser = async (req,res)=>{
             avatar,
         } = req.body
 
-        if(!email || !password || !userName || !location){
+        if (!email || !password || !userName || !location) {
             return res.status(400).json({
                 success: false,
                 message: "Required fields are missing"
             });
 
         }
-        email = email.trim().toLowerCase();
+        email = email?.trim().toLowerCase();
         if (password.length < 6) {
             return res.status(400).json({
                 success: false,
@@ -29,22 +30,22 @@ export const signupUser = async (req,res)=>{
         }
         const existingUser = await prisma.user.findUnique({
             where: {
-                email:email
+                email: email
             }
         })
-        if (existingUser){
+        if (existingUser) {
             return res.status(409).json({
-                success:false,
+                success: false,
                 message: "User already exist with same email address."
             })
         }
         const hashed_password = await bcrypt.hash(
-            password,10
+            password, 10
         )
 
 
         const user = await prisma.user.create({
-            data:{
+            data: {
                 email,
                 password: hashed_password,
                 userName,
@@ -59,7 +60,7 @@ export const signupUser = async (req,res)=>{
                 userId: user.id
             },
             process.env.JWT_SECRET_KEY,
-            {expiresIn:'3d'}
+            { expiresIn: '3d' }
         )
 
         res.cookie("token", token, {
@@ -69,66 +70,76 @@ export const signupUser = async (req,res)=>{
             path: "/",
             maxAge: 3 * 24 * 60 * 60 * 1000
         })
-        return res.status(201).json({ 
-            success: true, 
+        try {
+            sendEmail(
+                user.email,
+                "Welcome to PreXchange",
+                signupEmail(user?.userName)
+            )
+        } catch (err) {
+            console.log("Email failed:", err)
+        }
+        return res.status(201).json({
+            success: true,
             message: "User created successfully",
-            user: { 
-                id: user.id, 
-                email: user.email, 
-                userName: user.userName, 
-                phone: user.phone, 
-                location: user.location, 
-                avatar: user.avatar, 
-            }, 
+            user: {
+                id: user.id,
+                email: user.email,
+                userName: user.userName,
+                phone: user.phone,
+                location: user.location,
+                avatar: user.avatar,
+            },
         });
 
-    }catch(err){
-        console.log("Failed to create User ",err)
+    } catch (err) {
+        console.log("Failed to create User ", err)
         return res.status(500).json({
             success: false,
-            message:"Failed to create User"
+            message: "Failed to create User"
         })
     }
-    
+
 }
 
 
-export const loginUser = async(req,res)=>{
-    try{
-        let{email,password,userName} = req.body
-        
-        if(!email || !password){
+export const loginUser = async (req, res) => {
+    try {
+        let { email, password, userName } = req.body
+
+        if (!email || !password) {
             return res.status(400).json({
                 success: false,
                 message: "Required fields are missing"
             });
         }
+        email = email?.trim().toLowerCase()
         const user = await prisma.user.findFirst({
-            where:{
+            where: {
                 OR: [
                     { email: email },
                     { userName: userName }
-        ]
+                ]
             }
-        })  
-        if(!user){
+        })
+        if (!user) {
             return res.status(404).json({
-                success:false,
+                success: false,
                 message: "User not exist with this email address."
             })
-            
+
         }
-        const isPasswordCorrect = await bcrypt.compare(password,user.password)
-        if(!isPasswordCorrect) {
+        const isPasswordCorrect = await bcrypt.compare(password, user.password)
+        if (!isPasswordCorrect) {
             return res.status(401).json({
-                success:false,
+                success: false,
                 message: "Incorrect password "
             })
         }
         const token = jwt.sign(
-            {userId: user.id},
+            { userId: user.id },
             process.env.JWT_SECRET_KEY,
-            {expiresIn:'3d'}
+            { expiresIn: '3d' }
 
         )
         res.cookie("token", token, {
@@ -138,27 +149,37 @@ export const loginUser = async(req,res)=>{
             path: "/",
             maxAge: 3 * 24 * 60 * 60 * 1000
         })
-        return res.status(200).json({ 
-            success: true, 
+        try {
+            sendEmail(
+                user.email,
+                "New login detected in preXcange",
+                loginEmail(user?.userName)
+            )
+        } catch (err) {
+            console.log("Email failed:", err)
+        }
+
+        return res.status(200).json({
+            success: true,
             message: "User logged in successfully",
-            user: { 
-                id: user.id, 
-                email: user.email, 
-                userName: user.userName, 
-                phone: user.phone, 
-                location: user.location, 
-                avatar: user.avatar, 
-            }, 
+            user: {
+                id: user.id,
+                email: user.email,
+                userName: user.userName,
+                phone: user.phone,
+                location: user.location,
+                avatar: user.avatar,
+            },
         });
 
-    }catch(err){
-        console.log("Failed to create User ",err)
+    } catch (err) {
+        console.log("Failed to create User ", err)
         return res.status(500).json({
             success: false,
-            message:"Failed to create User"
+            message: "Failed to create User"
         })
     }
-    
+
 }
 
 export const logoutUser = async (req, res) => {
@@ -183,7 +204,7 @@ export const logoutUser = async (req, res) => {
         });
     }
 };
-    
+
 
 export const getCurrentUser = async (req, res) => {
     try {
@@ -205,13 +226,13 @@ export const getCurrentUser = async (req, res) => {
                 phone: true,
                 location: true,
                 avatar: true,
-                products:{
-                    include:{
-                        image:true
+                products: {
+                    include: {
+                        image: true
                     }
                 }
             },
-            
+
         });
 
         if (!user) {
@@ -232,7 +253,7 @@ export const getCurrentUser = async (req, res) => {
             message: "Failed to get current user"
         });
     }
-};  
+};
 
 export const googleCallback = async (req, res) => {
     try {
@@ -259,6 +280,17 @@ export const googleCallback = async (req, res) => {
             path: "/",
             maxAge: 3 * 24 * 60 * 60 * 1000
         })
+
+        try {
+            sendEmail(
+                user.email,
+                "New login detected in preXcange",
+                loginEmail(user?.userName)
+            )
+        } catch (err) {
+            console.log("Email failed:", err)
+        }
+
 
         return res.redirect("http://localhost:3000")
     } catch (err) {

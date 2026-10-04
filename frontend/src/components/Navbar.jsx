@@ -128,7 +128,7 @@ export default function Navbar() {
             )}
         <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 shadow-[0_1px_8px_rgba(15,23,42,0.04)] backdrop-blur-xl">
             <nav className="relative mx-auto flex min-h-[128px] max-w-7xl flex-wrap items-start gap-2 px-3 py-3 sm:min-h-[72px] sm:items-center sm:gap-3 sm:px-5 sm:py-2 lg:h-[72px] lg:flex-nowrap lg:gap-5 lg:px-6 lg:py-0">
-
+            <Link href={"/"} className="cursor-pointer">
                 <div className="shrink-0">
                     <Image
                         src="/logo.png"
@@ -138,6 +138,8 @@ export default function Navbar() {
                         className="h-auto w-24 transition-opacity duration-200 hover:opacity-90 sm:w-32 lg:w-40"
                     />
                 </div>
+            </Link>
+
 
                 <div className="relative ml-auto shrink-0 sm:ml-0">
                     <button
