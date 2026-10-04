@@ -65,7 +65,7 @@ export const signupUser = async (req, res) => {
 
         res.cookie("token", token, {
             httpOnly: true,
-            secure: false,
+            secure: true,
             sameSite: "lax",
             path: "/",
             maxAge: 3 * 24 * 60 * 60 * 1000
@@ -144,7 +144,7 @@ export const loginUser = async (req, res) => {
         )
         res.cookie("token", token, {
             httpOnly: true,
-            secure: false,
+            secure: true,
             sameSite: "lax",
             path: "/",
             maxAge: 3 * 24 * 60 * 60 * 1000
@@ -186,7 +186,7 @@ export const logoutUser = async (req, res) => {
     try {
         res.clearCookie("token", {
             httpOnly: true,
-            secure: false,
+            secure: true,
             sameSite: "lax",
             path: "/"
         });
@@ -199,7 +199,7 @@ export const logoutUser = async (req, res) => {
         console.log("Logout failed:", err);
 
         return res.status(500).json({
-            success: false,
+            success: true,
             message: "Failed to logout user"
         });
     }
@@ -275,7 +275,7 @@ export const googleCallback = async (req, res) => {
 
         res.cookie("token", token, {
             httpOnly: true,
-            secure: false,
+            secure: true,
             sameSite: "lax",
             path: "/",
             maxAge: 3 * 24 * 60 * 60 * 1000
