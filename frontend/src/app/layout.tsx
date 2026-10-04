@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar.jsx"
 import Footer from "@/components/Footer.jsx"
 import {ToastProvider} from "@heroui/react"
+import { Suspense } from "react"
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
   subsets: ["latin"],
@@ -23,7 +24,9 @@ export default function RootLayout({
       className={`${plusJakartaSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col scroll-smooth">
-        <Navbar/>
+        <Suspense fallback={null}>
+          <Navbar />
+        </Suspense>
         {children}
         <Footer/>
         <ToastProvider />
