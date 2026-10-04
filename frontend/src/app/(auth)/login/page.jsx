@@ -3,10 +3,9 @@
 import React, { useState } from "react"
 import Image from "next/image"
 import { useRouter } from 'next/navigation'
-import Link from "next/link.js"
+import Link from "next/link"
 import { handleSubmit } from "../../../services/auth.service/handleSubmitlogin.js"
 import { FcGoogle } from "react-icons/fc"
-import {toast} from "@heroui/react"
 
 function login() {
     const [userName, setUserName] = useState("")
