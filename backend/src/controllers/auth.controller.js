@@ -260,7 +260,7 @@ export const googleCallback = async (req, res) => {
         const user = req.user
 
         if (!user) {
-            return res.redirect("http://localhost:3000/login")
+            return res.redirect("https://prexchange.vercel.app/login")
         }
 
         const token = jwt.sign(
@@ -292,10 +292,10 @@ export const googleCallback = async (req, res) => {
         }
 
 
-        return res.redirect("http://localhost:3000")
+        return res.redirect("https://prexchange.vercel.app/")
     } catch (err) {
         console.log("Google callback failed:", err)
 
-        return res.redirect("http://localhost:3000/login")
+        return res.redirect("https://prexchange.vercel.app/login")
     }
 }
