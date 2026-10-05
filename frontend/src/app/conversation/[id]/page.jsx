@@ -15,6 +15,7 @@ function Chat() {
     const [userName, setUsername] = useState("")
     const [userId, setUserId] = useState(null)
     const [typer, setTyper] = useState("")
+    const typingTimer = useRef(null)
 
     const searchParams = useSearchParams()
     const params = useParams()
@@ -62,13 +63,24 @@ function Chat() {
         })
 
         socket.current.on("typing", (userName) => {
-            console.log("TYPING RECEIVED:", userName)
             setTyper(userName)
         })
 
+
+        socket.current.on("stopTyping", () => {
+            setTyper("")
+        })
+
+
         return () => {
-            socket.current.disconnect()
-            socket.current = null
+    socket.current?.off("connect")
+    socket.current?.off("disconnect")
+    socket.current?.off("newMessage")
+    socket.current?.off("typing")
+    socket.current?.off("stopTyping")
+
+    socket.current?.disconnect()
+    socket.current = null
         }
     }, [])
 
@@ -78,6 +90,16 @@ function Chat() {
                 conversationId,
                 userName
             })
+            clearTimeout(typingTimer.current)
+        }
+        typingTimer.current = setTimeout(() => {
+            socket.current.emit("stopTyping", {
+                conversationId
+            })
+        }, 2000)
+
+        return ()=>{
+            clearTimeout(typingTimer.current)
         }
     }, [text, conversationId, userName])
 
@@ -119,8 +141,8 @@ function Chat() {
 
                             <span
                                 className={`h-2 w-2 rounded-full ${status
-                                        ? "bg-emerald-500"
-                                        : "bg-slate-300"
+                                    ? "bg-emerald-500"
+                                    : "bg-slate-300"
                                     }`}
                             />
 
@@ -129,8 +151,13 @@ function Chat() {
                             </span>
 
                             {typer && (
-                                <span className="ml-2 font-medium text-cyan-600">
-                                    {typer} is typing...
+                                <span className="ml-2 inline-flex items-center gap-1.5 rounded-full bg-cyan-50 px-2.5 py-1 text-xs font-medium text-cyan-600">
+                                    <span className="flex items-center gap-0.5">
+                                        <span className="h-1 w-1 animate-bounce rounded-full bg-cyan-500 [animation-delay:-0.3s]" />
+                                        <span className="h-1 w-1 animate-bounce rounded-full bg-cyan-500 [animation-delay:-0.15s]" />
+                                        <span className="h-1 w-1 animate-bounce rounded-full bg-cyan-500" />
+                                    </span>
+                                    {typer} is typing
                                 </span>
                             )}
 
@@ -193,15 +220,15 @@ function Chat() {
                             <div
                                 key={msg.id}
                                 className={`mb-2 flex ${isMine
-                                        ? "justify-end"
-                                        : "justify-start"
+                                    ? "justify-end"
+                                    : "justify-start"
                                     }`}
                             >
 
                                 <div
                                     className={`max-w-[75%] rounded-2xl px-4 py-2.5 text-sm leading-5 shadow-sm sm:max-w-[60%] ${isMine
-                                            ? "rounded-br-md bg-cyan-600 text-white"
-                                            : "rounded-bl-md border border-slate-200 bg-white text-slate-800"
+                                        ? "rounded-br-md bg-cyan-600 text-white"
+                                        : "rounded-bl-md border border-slate-200 bg-white text-slate-800"
                                         }`}
                                 >
                                     <p className="wrap-break-word">
@@ -210,8 +237,8 @@ function Chat() {
 
                                     <div
                                         className={`mt-1 text-[10px] ${isMine
-                                                ? "text-cyan-100"
-                                                : "text-slate-400"
+                                            ? "text-cyan-100"
+                                            : "text-slate-400"
                                             }`}
                                     >
                                         {new Date(

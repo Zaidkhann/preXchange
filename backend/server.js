@@ -44,6 +44,10 @@ const startServer = ()=>{
                 socket.to(`conversation-${conversationId}`)
                 .emit("typing", userName)
             })
+            socket.on("stopTyping",({conversationId})=>{
+                socket.to(`conversation-${conversationId}`)
+                .emit("stopTyping", conversationId)
+            })
 
             socket.on("disconnect",(socket)=>{
                 console.log("Disconnected ",socket.id
