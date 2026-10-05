@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { connectWs } from "../../../ws"
 import { SendIcon, ArrowLeft, MoreVertical } from "lucide-react"
 import { getCurrentUser } from "../../../services/me.js"
-import { useSearchParams, useParams,useRouter } from "next/navigation.js"
+import { useSearchParams, useParams, useRouter } from "next/navigation.js"
 import { getConversationById } from "../../../services/conversation-frontend.js"
 
 function Chat() {
@@ -14,6 +14,7 @@ function Chat() {
     const [status, setStatus] = useState(false)
     const [userName, setUsername] = useState("")
     const [userId, setUserId] = useState(null)
+    const [typer, setTyper] = useState("")
 
     const searchParams = useSearchParams()
     const params = useParams()
@@ -60,11 +61,27 @@ function Chat() {
             setMessages((prev) => [...prev, msg])
         })
 
+        socket.current.on("typing", (userName) => {
+            console.log("TYPING RECEIVED:", userName)
+            setTyper(userName)
+        })
+
         return () => {
             socket.current.disconnect()
             socket.current = null
         }
     }, [])
+
+    useEffect(() => {
+        if (text) {
+            socket.current.emit("typing", {
+                conversationId,
+                userName
+            })
+        }
+    }, [text, conversationId, userName])
+
+
 
     const handleSendButton = () => {
         if (!text.trim()) return
@@ -85,7 +102,7 @@ function Chat() {
 
                 <div className="flex items-center gap-3">
 
-                    <button onClick={()=>router.back()} className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100">
+                    <button onClick={() => router.back()} className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100">
                         <ArrowLeft size={19} />
                     </button>
 
@@ -101,16 +118,21 @@ function Chat() {
                         <div className="flex items-center gap-1.5">
 
                             <span
-                                className={`h-2 w-2 rounded-full ${
-                                    status
+                                className={`h-2 w-2 rounded-full ${status
                                         ? "bg-emerald-500"
                                         : "bg-slate-300"
-                                }`}
+                                    }`}
                             />
 
                             <span className="text-xs text-slate-500">
                                 {status ? "Online" : "Offline"}
                             </span>
+
+                            {typer && (
+                                <span className="ml-2 font-medium text-cyan-600">
+                                    {typer} is typing...
+                                </span>
+                            )}
 
                         </div>
                     </div>
@@ -170,30 +192,27 @@ function Chat() {
                         return (
                             <div
                                 key={msg.id}
-                                className={`mb-2 flex ${
-                                    isMine
+                                className={`mb-2 flex ${isMine
                                         ? "justify-end"
                                         : "justify-start"
-                                }`}
+                                    }`}
                             >
 
                                 <div
-                                    className={`max-w-[75%] rounded-2xl px-4 py-2.5 text-sm leading-5 shadow-sm sm:max-w-[60%] ${
-                                        isMine
+                                    className={`max-w-[75%] rounded-2xl px-4 py-2.5 text-sm leading-5 shadow-sm sm:max-w-[60%] ${isMine
                                             ? "rounded-br-md bg-cyan-600 text-white"
                                             : "rounded-bl-md border border-slate-200 bg-white text-slate-800"
-                                    }`}
+                                        }`}
                                 >
                                     <p className="wrap-break-word">
                                         {msg.text}
                                     </p>
 
                                     <div
-                                        className={`mt-1 text-[10px] ${
-                                            isMine
+                                        className={`mt-1 text-[10px] ${isMine
                                                 ? "text-cyan-100"
                                                 : "text-slate-400"
-                                        }`}
+                                            }`}
                                     >
                                         {new Date(
                                             msg.createdAt

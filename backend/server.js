@@ -40,12 +40,18 @@ const startServer = ()=>{
                 }
             })
 
+            socket.on("typing",({conversationId,userName})=>{
+                socket.to(`conversation-${conversationId}`)
+                .emit("typing", userName)
+            })
 
             socket.on("disconnect",(socket)=>{
                 console.log("Disconnected ",socket.id
                 )
             })
         })
+
+
         server.listen(PORT,()=>{
             console.log("Server is started on PORT: ",PORT)
         })
