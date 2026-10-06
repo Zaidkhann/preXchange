@@ -4,12 +4,18 @@ import GetProducts from "@/components/getAllProducts.jsx"
 import Link from "next/link";
 import { Plus } from "lucide-react"
 
+export const metadata = {
+  title: "PreXchange - Buy & Sell Used Products",
+  description:
+    "Buy and sell used mobiles, cars, bikes, electronics, properties and more on PreXchange.",
+}
+
 export default function Home() {
   return (
     <div>
       <Hero />
       <CategoryCard />
-        <GetProducts />
+      <GetProducts />
       <Link
         href="/post"
         className="fixed bottom-5 left-1/2 z-[60] -translate-x-1/2 sm:static sm:translate-x-0"
