@@ -75,6 +75,28 @@ export default function Navbar() {
         fetchUser()
     }, [])
 
+    useEffect(() => {
+        const savedLocation = localStorage.getItem("location_getProducts")
+
+        if (savedLocation && savedLocation !== "undefined") {
+            try {
+                setLocation(JSON.parse(savedLocation))
+            } catch {
+                localStorage.removeItem("location_getProducts")
+            }
+        }
+    }, [])
+
+
+    useEffect(() => {
+        if (!location) return
+
+        localStorage.setItem(
+            "location_getProducts",
+            JSON.stringify(location)
+        )
+    }, [location])
+
     if (loading) {
         return (
             <div className="flex min-h-[60vh] items-center justify-center">

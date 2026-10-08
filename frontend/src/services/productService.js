@@ -1,22 +1,29 @@
 
-async function productsByCategoryId(categoryId,searchParams){
+async function productsByCategoryId(categoryId, searchParams) {
     const params = await searchParams
     const minPrice = params?.min_price_
     const maxPrice = params?.max_price_
     const afterYear = params?.after_year
     const beforeYear = params?.before_year
+    const location = JSON.parse(localStorage.getItem("location_getProducts"))
+
+    const city = location?.city
+    const state = location?.state
 
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/fetchProductsByFilter/${categoryId}?min_price_=${minPrice}&max_price_=${maxPrice}&after_year=${afterYear}&before_year=${beforeYear}`,
         {
-            credentials:"include",
-            cache:"no-store"
+            credentials: "include",
+            cache: "no-store",
+            headers: {
+                "x-location": city || state
+            },
         }
     )
-    if(!res.ok){
+    if (!res.ok) {
         console.log("Failed to get products by categoryId")
         return {
-            success:false,       
-            message:"Failed to get products by categoryId"
+            success: false,
+            message: "Failed to get products by categoryId"
         }
     }
     const data = await res.json()
@@ -24,33 +31,40 @@ async function productsByCategoryId(categoryId,searchParams){
 
 }
 
-async function getAllProducts(search="",page){
+async function getAllProducts(search = "", page) {
+    const location = JSON.parse(localStorage.getItem("location_getProducts"))
+
+    const city = location?.city
+    const state = location?.state
     const url = new URL(`${process.env.NEXT_PUBLIC_API_URL}/api/products/fetch-products?page=${page}`)
-    if(search.trim()){
-        url.searchParams.set("search",search.trim())
+    if (search.trim()) {
+        url.searchParams.set("search", search.trim())
     }
-    const res = await fetch(url,{
-        cache:"no-store"
+    const res = await fetch(url, {
+        cache: "no-store",
+        headers: {
+            "x-location": city || state
+        }
     })
-    if(!res.ok){
+    if (!res.ok) {
         console.log("Failed to get products")
-        return{
-            success:false,       
-            message:"Failed to get products"
+        return {
+            success: false,
+            message: "Failed to get products"
         }
     }
     const data = await res.json()
     return data
 }
-async function getProductById(productId){
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/fetchProductById/${productId}`,{
-        cache:"no-store"
+async function getProductById(productId) {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/fetchProductById/${productId}`, {
+        cache: "no-store"
     })
-    if(!res.ok){
+    if (!res.ok) {
         console.log("Failed to get products")
-        return{
-            success:false,       
-            message:"Failed to get products"
+        return {
+            success: false,
+            message: "Failed to get products"
         }
     }
     const data = await res.json()
@@ -58,7 +72,7 @@ async function getProductById(productId){
 }
 
 
-const editProduct = async(
+const editProduct = async (
     productId,
     adTitle,
     description,
@@ -68,7 +82,7 @@ const editProduct = async(
     attributes,
     isSold
 
-)=>{
+) => {
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/update-product/${productId}`, {
             method: "POST",
@@ -100,11 +114,11 @@ const editProduct = async(
 
 
 
-const deleteProduct = async(productId)=>{
-    try{
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/delete-product/${productId}`,{
-            credentials:"include",
-            method:"DELETE",
+const deleteProduct = async (productId) => {
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/delete-product/${productId}`, {
+            credentials: "include",
+            method: "DELETE",
         })
         const data = res.json()
         return data
@@ -116,5 +130,5 @@ const deleteProduct = async(productId)=>{
 
 
 
-export {productsByCategoryId,getAllProducts,getProductById,editProduct, deleteProduct}
+export { productsByCategoryId, getAllProducts, getProductById, editProduct, deleteProduct }
 

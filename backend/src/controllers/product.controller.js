@@ -93,35 +93,41 @@ export const fetchAllProducts = async (req, res) => {
         const limit = Math.min(Math.max(Number(req.query.limit) || 10, 1), 50)
         const skip = (page - 1) * limit
         const search = req.query.search?.trim()
-        const where ={
-                isSold:false,
-        ...(search ? {
-            OR: [
-                {
-                    adTitle: {
-                        contains: search
-                    }
-                },
-                {
-                    description: {
-                        contains: search
-                    }
-                },
-                {
-                    location: {
-                        contains: search
-                    }
-                }, {
-                    category: {
-                        name: {
+        const location = req.headers["x-location"]
+        const where = {
+            isSold: false,
+            ...(location ? {
+                location: {
+                    contains: location
+                }
+            } : {}),
+            ...(search ? {
+                OR: [
+                    {
+                        adTitle: {
                             contains: search
                         }
+                    },
+                    {
+                        description: {
+                            contains: search
+                        }
+                    },
+                    {
+                        location: {
+                            contains: search
+                        }
+                    }, {
+                        category: {
+                            name: {
+                                contains: search
+                            }
+                        }
                     }
-                }
-            ]
+                ]
+            }
+                : {})
         }
-        : {})
-    }
 
         const [products, totalProducts] = await Promise.all([
             prisma.product.findMany({
@@ -140,7 +146,7 @@ export const fetchAllProducts = async (req, res) => {
                     image: true,
                     category: true
                 },
-                
+
 
             }),
             prisma.product.count({ where })
@@ -184,9 +190,15 @@ export const fetchProductsByFilter = async (req, res) => {
         const maxPrice = Number(req.query.max_price_) || undefined
         const afterYear = Number(req.query.after_year) || undefined
         const beforeYear = Number(req.query.before_year) || undefined
+        const location = req.headers["x-location"] || undefined
 
         const where = {
             categoryId,
+            ...(location ? {
+                location: {
+                    contains: location
+                }
+            } : {}),
             price: {
                 gte: minPrice,
                 lte: maxPrice
@@ -195,7 +207,7 @@ export const fetchProductsByFilter = async (req, res) => {
                 lte: beforeYear,
                 gte: afterYear
             },
-            isSold:false
+            isSold: false
         }
 
         const [products, totalProducts] = await Promise.all([
@@ -282,8 +294,8 @@ export const fetchProductById = async (req, res) => {
 }
 
 
-export const editProduct = async(req,res) => {
-    try{
+export const editProduct = async (req, res) => {
+    try {
         const productId = Number(req.params.productId)
         // const userId = req.user.userId
         const {
@@ -296,17 +308,17 @@ export const editProduct = async(req,res) => {
             isSold,
         } = req.body
         const updatedProduct = await prisma.product.update({
-            where:{
-                id:productId,
+            where: {
+                id: productId,
             },
-            data:{
-                ...(adTitle !== undefined && {adTitle}),
-                ...(description !== undefined && {description}),
-                ...(location !== undefined && {location}),
-                ...(year !== undefined && {year}),
-                ...(attributes !== undefined && {attributes}),
-                ...(price !== undefined && {price}),
-                ...(isSold !== undefined && {isSold})
+            data: {
+                ...(adTitle !== undefined && { adTitle }),
+                ...(description !== undefined && { description }),
+                ...(location !== undefined && { location }),
+                ...(year !== undefined && { year }),
+                ...(attributes !== undefined && { attributes }),
+                ...(price !== undefined && { price }),
+                ...(isSold !== undefined && { isSold })
             }
         })
         return res.status(200).json({
@@ -314,12 +326,12 @@ export const editProduct = async(req,res) => {
             product: updatedProduct
         })
 
-    }catch(err){
-        console.log("Failed to update product, ",err)
+    } catch (err) {
+        console.log("Failed to update product, ", err)
         return res.json({
             success: false,
             message: "Failed to edit product "
-        }) 
+        })
     }
 }
 
@@ -327,24 +339,24 @@ export const editProduct = async(req,res) => {
 
 
 
-export const deleteProduct = async(req,res) => {
-    try{
+export const deleteProduct = async (req, res) => {
+    try {
         const userId = req.user.userId
         const productId = Number(req.params.productId)
         const product = await prisma.product.findFirst({
-            where:{
-                id:productId,
-                userId:userId
+            where: {
+                id: productId,
+                userId: userId
             }
         })
-        if(!product){
+        if (!product) {
             return res.status(404).json({
-                success:false,
+                success: false,
                 message: "Product not found"
             })
         }
         const deletedProduct = await prisma.product.delete({
-            where:{
+            where: {
                 id: productId
             }
         })
@@ -354,7 +366,7 @@ export const deleteProduct = async(req,res) => {
             product: deletedProduct
         })
 
-    }catch(err){
+    } catch (err) {
         console.log("Failed to Delete Product Internal error", err)
         return res.status(500).json({
             success: false,
