@@ -1,15 +1,24 @@
 import React from "react"
+import { cookies } from "next/headers"
 import { productsByCategoryId } from "@/services/productService.js"
 import ProductCard from "../../../components/ProductCard.jsx"
 import Filters from "../../../components/filters.jsx"
 
 async function page({ params, searchParams }) {
+    const cookieStore = await cookies()
     const { categoryId } = await params
 
+    let location = null
+    try {
+        const raw = cookieStore.get("location_getProducts")?.value
+        location = raw ? JSON.parse(decodeURIComponent(raw)) : null
+    } catch {}
     const productsResponse = await productsByCategoryId(
         categoryId,
-        searchParams
+        searchParams,
+        location
     )
+
 
     const products = productsResponse?.data || []
 

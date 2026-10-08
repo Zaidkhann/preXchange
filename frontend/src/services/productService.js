@@ -1,12 +1,11 @@
 
-async function productsByCategoryId(categoryId, searchParams) {
+async function productsByCategoryId(categoryId, searchParams, location) {
     const params = await searchParams
     const minPrice = params?.min_price_
     const maxPrice = params?.max_price_
     const afterYear = params?.after_year
     const beforeYear = params?.before_year
-    const location = JSON.parse(localStorage.getItem("location_getProducts"))
-
+    
     const city = location?.city
     const state = location?.state
     const headers = {}

@@ -77,7 +77,6 @@ export default function Navbar() {
 
     useEffect(() => {
         const savedLocation = localStorage.getItem("location_getProducts")
-
         if (savedLocation && savedLocation !== "undefined") {
             try {
                 setLocation(JSON.parse(savedLocation))
@@ -85,18 +84,22 @@ export default function Navbar() {
                 localStorage.removeItem("location_getProducts")
             }
         }
+        
     }, [])
 
 
    useEffect(() => {
     if (location) {
+        const value = JSON.stringify(location)
         localStorage.setItem(
             "location_getProducts",
-            JSON.stringify(location)
+            value
         )
+        document.cookie = `location_getProducts=${encodeURIComponent(value)}; path=/; max-age=${60 * 60 * 24 * 30}; SameSite=Lax`
 
         window.dispatchEvent(new Event("locationChanged"))
     }
+    router.refresh()
 }, [location])
 
     if (loading) {
