@@ -10,18 +10,29 @@ function GetProducts() {
     const searchParams = useSearchParams()
     const search = searchParams.get("search") || ""
     const [page, setPage] = useState(1)
-    const [location,setLocation] = useState()
+    const [location,setLocation] = useState(null)
     const [hasNextPage,setHasNextPage] = useState(false)
 
 
-    useEffect(()=>{
-        localStorage.getItem("location_getProducts")
-        if (location){
-            setLocation(location)
-        }
+    useEffect(() => {
+    const updateLocation = () => {
+        const savedLocation = localStorage.getItem("location_getProducts")
 
-    },[location])
-  
+        if (savedLocation) {
+            setLocation(JSON.parse(savedLocation))
+        } else {
+            setLocation(null)
+        }
+    }
+
+    updateLocation()
+
+    window.addEventListener("locationChanged", updateLocation)
+
+    return () => {
+        window.removeEventListener("locationChanged", updateLocation)
+    }
+}, [])
     
 
     useEffect(() => {

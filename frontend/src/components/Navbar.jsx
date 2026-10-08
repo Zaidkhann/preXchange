@@ -88,14 +88,16 @@ export default function Navbar() {
     }, [])
 
 
-    useEffect(() => {
-        if (!location) return
-
+   useEffect(() => {
+    if (location) {
         localStorage.setItem(
             "location_getProducts",
             JSON.stringify(location)
         )
-    }, [location])
+
+        window.dispatchEvent(new Event("locationChanged"))
+    }
+}, [location])
 
     if (loading) {
         return (

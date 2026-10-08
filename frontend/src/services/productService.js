@@ -9,14 +9,16 @@ async function productsByCategoryId(categoryId, searchParams) {
 
     const city = location?.city
     const state = location?.state
+    const headers = {}
+    if (city || state) {
+        headers["x-location"] = city || state
+    }
 
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/fetchProductsByFilter/${categoryId}?min_price_=${minPrice}&max_price_=${maxPrice}&after_year=${afterYear}&before_year=${beforeYear}`,
         {
             credentials: "include",
             cache: "no-store",
-            headers: {
-                "x-location": city || state
-            },
+            headers
         }
     )
     if (!res.ok) {
@@ -40,11 +42,15 @@ async function getAllProducts(search = "", page) {
     if (search.trim()) {
         url.searchParams.set("search", search.trim())
     }
+    const headers = {}
+
+    if (city || state) {
+        headers["x-location"] = city || state
+    }
+
     const res = await fetch(url, {
         cache: "no-store",
-        headers: {
-            "x-location": city || state
-        }
+        headers
     })
     if (!res.ok) {
         console.log("Failed to get products")
