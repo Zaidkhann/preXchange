@@ -10,9 +10,17 @@ function GetProducts() {
     const searchParams = useSearchParams()
     const search = searchParams.get("search") || ""
     const [page, setPage] = useState(1)
+    const [location,setLocation] = useState()
     const [hasNextPage,setHasNextPage] = useState(false)
 
 
+    useEffect(()=>{
+        localStorage.getItem("location_getProducts")
+        if (location){
+            setLocation(location)
+        }
+
+    },[location])
   
     
 
@@ -31,12 +39,12 @@ function GetProducts() {
         }
 
         fetchProducts()
-    }, [search,page])
+    }, [search,page,location])
 
     useEffect(() => {
     setPage(1)
     setProducts([])
-}, [search])
+}, [search,location])
 
     return (
     <div className="flex flex-col items-center gap-4">
