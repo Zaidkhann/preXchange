@@ -68,7 +68,7 @@ export default function Footer() {
     const pathName = usePathname()
     return (
         
-        <footer className={pathName=="/login" || "/signup"?"hidden":"mt-20 border-t border-slate-200 bg-white text-slate-900"}>
+        <footer className={pathName=="/login" || pathName == "/signup"?"hidden":"mt-20 border-t border-slate-200 bg-white text-slate-900"}>
 
             <section className="mx-auto max-w-7xl px-6 pt-12 lg:px-8">
 

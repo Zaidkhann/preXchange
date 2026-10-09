@@ -182,7 +182,7 @@ function Chat() {
                         </p>
 
                         <p className="mt-0.5 text-sm font-medium text-slate-800">
-                            Product #{productId || conversationId}
+                            Product #{productTitle || productId}
                         </p>
                     </div>
 
