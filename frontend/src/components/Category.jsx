@@ -14,7 +14,8 @@ function CategoryCard() {
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`, {
                 credentials: "include",
-                cache:'no-store',
+                cache:'force-cache',
+                
             })
             if (!res.ok) {
                 console.log("Failed to get category Detail")
