@@ -94,8 +94,10 @@ function ProductPageComp({
   }
   const handleChat = async () => {
     const data = await postConversation(productId)
-    if (!data) router.push("/login")
-
+    if (!data|| !data.id) {
+    router.replace("/login")
+    return
+  }   
     router.push(`/conversation/${data?.id}?seller=${user?.userName}&pr=${price}&prodId=${productId}&prodTitle=${productTitle}`)
 }
 

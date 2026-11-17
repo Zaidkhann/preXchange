@@ -11,10 +11,13 @@ const postConversation = async(productId)=>{
              
             })
         })
-        if(!res.ok){
-            console.log("Failed to post conversation")
-            return 
+        if (res.status === 401) {
+            return null
         }
+        if(!res.ok){
+            throw new Error("Failed to create conversation")
+        }
+
         const data = await res.json()
         return data
         

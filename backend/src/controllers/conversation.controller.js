@@ -2,8 +2,12 @@ import prisma from "../lib/prisma.js"
 export const postConversation = async (req, res) => {
     try {
 
-        const buyerId = req.user.userId
-
+        const buyerId = req.user?.userId
+        if (!buyerId) {
+            return res.status(401).json({
+                message: "Unauthorized"
+            })
+        }
 
         const product = await prisma.product.findUnique({
             where: {
@@ -17,6 +21,7 @@ export const postConversation = async (req, res) => {
         }
         const sellerId = product.userId;
         const productId = product.id;
+
         if (buyerId === sellerId) {
             return res.status(400).json({
                 message: "You cannot chat with yourself"
