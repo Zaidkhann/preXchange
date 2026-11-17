@@ -20,7 +20,9 @@ function LocationByCityApi({ onSelectLocation, onCurrentLocation }) {
             setLoading(true)
 
             const res = await fetch(
-                `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(value)}&filter=countrycode:in&limit=5&format=json&apiKey=${process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY}`
+                `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(value)}&filter=countrycode:in&limit=5&format=json&apiKey=${process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY}`,{
+                    cache:"force-cache"
+                }
             )
 
             const data = await res.json()
